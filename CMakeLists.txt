@@ -18,9 +18,9 @@ file(GLOB_RECURSE LIB_HEADERS "src/*.hpp")
 
 # Project options
 option(BUILD_SHARED_LIBS		"Build a shared library."	ON)
-option(OPTION_BUILD_TESTS		"Build tests."				ON)
-#option(OPTION_BUILD_DOCS		"Build documentation."		OFF)
-#option(OPTION_BUILD_EXAMPLES	"Build examples."			OFF)
+option(BUILD_TESTS				"Build tests."				ON)
+#option(BUILD_DOCS				"Build documentation."		OFF)
+#option(BUILD_EXAMPLES			"Build examples."			OFF)
 
 # Project properties
 set(CMAKE_CXX_STANDARD			17)
