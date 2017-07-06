@@ -12,7 +12,7 @@
 
 namespace NIF
 {
-	//! \note NIFHeader is always in Little Endian.
+	//! \note NIFHeader is always in little endian.
 	class NIF_API NIFHeader
 	{
 	public:
