@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.8.2)
 project(niflib)
 
 # Project dependencies
+find_package(Threads REQUIRED)
 # find_package(Boost REQUIRED)
 
 # CMake Modules
@@ -17,7 +18,7 @@ file(GLOB_RECURSE LIB_HEADERS "src/*.hpp")
 
 # Project options
 option(BUILD_SHARED_LIBS		"Build a shared library."	ON)
-#option(OPTION_BUILD_TESTS		"Build tests."				OFF)
+option(OPTION_BUILD_TESTS		"Build tests."				ON)
 #option(OPTION_BUILD_DOCS		"Build documentation."		OFF)
 #option(OPTION_BUILD_EXAMPLES	"Build examples."			OFF)
 
@@ -49,5 +50,19 @@ endif()
 
 # Compiler specific options
 if(CMAKE_COMPILER_IS_GNUCXX)
-	# set(CMAKE_CXX_FLAGS "-O2")  # Optimize Level 2
+	# set(CMAKE_CXX_FLAGS "-O2") # Optimize Level 2
+endif()
+
+# Option settings
+if(OPTION_BUILD_TESTS)
+include(GoogleTest)
+	add_subdirectory(lib/googletest)
+	enable_testing()
+	include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+	add_executable(RunGetNifVersion test/get_nif_version_test.cpp)
+	target_link_libraries(RunGetNifVersion gtest gtest_main)
+	target_link_libraries(RunGetNifVersion niflib)
+
+	add_test(get_nif_version RunGetNifVersion "${CMAKE_CURRENT_LIST_DIR}/data/")
 endif()

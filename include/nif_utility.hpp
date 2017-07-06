@@ -39,18 +39,13 @@ namespace NIF
 		return n == sizeof(T) ? j :
 			EndianSwap<T>(i >> CHAR_BIT, (j << CHAR_BIT) | (i & (T)(unsigned char)(-1)), n + 1);
 	}
+
 	template<class T>
 	constexpr typename std::enable_if<std::is_unsigned<T>::value, T>::type
 	WriteUnsignedIntegral(std::ostream& out, T val)
 	{
 		out.write(reinterpret_cast<char*>(&val), static_cast<std::streamsize>(val));
 		return val;
-	}
-
-	template<typename E>
-	constexpr auto to_integral(E e) -> typename std::underlying_type<E>::type 
-	{
-		return static_cast<typename std::underlying_type<E>::type>(e);
 	}
 
 	//! \todo Figure out template way of Reading/Writing strings
@@ -61,7 +56,7 @@ namespace NIF
 	std::string ReadIntString(std::istream& in);
 
 	//! ---NIF write utility functions---
-	//! \todo Add endianness support for reading strings (just the length part)
+	//! \todo Add endianness support for writing strings (just the length part)
 	void WriteLine(std::ostream& out, std::string line);
 	void WriteByteString(std::ostream& out, const std::string& line);
 	void WriteIntString(std::ostream& out, const std::string& line);

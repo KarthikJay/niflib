@@ -18,7 +18,7 @@ namespace NIF
 		uint8_t test_byte;
 		bool diff_endian = false;
 
-		if(nh.version <= to_integral(NIFVersion::VER_3_1))
+		if(nh.version <= NIFVersion::V3_1)
 		{
 			for(auto itr : nh.copyright)
 			{
@@ -26,45 +26,45 @@ namespace NIF
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_0_0_4))
+		if(nh.version >= NIFVersion::V20_0_0_4)
 		{
 			inf >> test_byte;
 			nh.endian = static_cast<EndianType>(test_byte);
 			diff_endian = (nh.endian != static_cast<EndianType>(SYSTEM_ENDIAN));
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_10_1_0_0))
+		if(nh.version >= NIFVersion::V10_1_0_0)
 		{
 			inf >> nh.user_version_1;
 			nh.user_version_1 = diff_endian ? EndianSwap(nh.user_version_1) : nh.user_version_1;
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_0_0_4))
+		if(nh.version >= NIFVersion::V20_0_0_4)
 		{
 			inf >> nh.num_blocks;
 			nh.num_blocks	= diff_endian ? EndianSwap(nh.num_blocks) : nh.num_blocks;
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_10_1_0_0))
+		if(nh.version >= NIFVersion::V10_1_0_0)
 		{
 			if(nh.user_version_1 >= 10 ||
-				((nh.user_version_1 == 1) && nh.version != to_integral(NIFVersion::VER_10_2_0_0)))
+				((nh.user_version_1 == 1) && nh.version != NIFVersion::V10_2_0_0))
 			{
 				inf >> nh.user_version_2;
 				nh.user_version_2 = diff_endian ? EndianSwap(nh.user_version_2) : nh.user_version_2;
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_30_0_0_2))
+		if(nh.version >= NIFVersion::V30_0_0_2)
 		{
 			inf >> nh.unknown_int_2;
 			nh.unknown_int_2 = diff_endian ? EndianSwap(nh.unknown_int_2) : nh.unknown_int_2;
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_10_0_1_0))
+		if(nh.version >= NIFVersion::V10_0_1_0)
 		{
 			if((nh.user_version_1 = 10) ||
-				((nh.user_version_1 = 1) && nh.version != to_integral(NIFVersion::VER_10_2_0_0)))
+				((nh.user_version_1 = 1) && nh.version != NIFVersion::V10_2_0_0))
 			{
 				inf >> nh.export_info.unknown;
 				nh.export_info.unknown	= diff_endian
@@ -74,12 +74,12 @@ namespace NIF
 			inf >> nh.export_info;
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_2_0_7) && nh.user_version_2 == 130)
+		if(nh.version >= NIFVersion::V20_2_0_7 && nh.user_version_2 == 130)
 		{
 			nh.export_info_3 = ReadByteString(inf);
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_10_1_0_0))
+		if(nh.version >= NIFVersion::V10_1_0_0)
 		{
 			inf >> nh.num_block_type;
 			nh.num_block_type	= diff_endian ? EndianSwap(nh.num_block_type) : nh.num_block_type;
@@ -96,7 +96,7 @@ namespace NIF
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_2_0_7))
+		if(nh.version >= NIFVersion::V20_2_0_7)
 		{
 			nh.block_size.resize(nh.num_blocks);
 			for(auto itr : nh.block_size)
@@ -106,7 +106,7 @@ namespace NIF
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_1_0_3))
+		if(nh.version >= NIFVersion::V20_1_0_3)
 		{
 			inf >> nh.num_strings;
 			nh.num_strings	= diff_endian ? EndianSwap(nh.num_strings) : nh.num_strings;
@@ -119,7 +119,7 @@ namespace NIF
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_1_0_3))
+		if(nh.version >= NIFVersion::V20_1_0_3)
 		{
 			inf >> nh.unknown_int_2;
 			nh.unknown_int_2 = diff_endian ? EndianSwap(nh.unknown_int_2) : nh.unknown_int_2;
@@ -139,7 +139,7 @@ namespace NIF
 	{
 		bool diff_endian = (nh.endian != static_cast<EndianType>(SYSTEM_ENDIAN));
 
-		if(nh.version >= to_integral(NIFVersion::VER_3_1))
+		if(nh.version >= NIFVersion::V3_1)
 		{
 			for(auto itr : nh.copyright)
 			{
@@ -147,45 +147,45 @@ namespace NIF
 			}
 		}
 		
-		if(nh.version >= to_integral(NIFVersion::VER_3_3_0_13))
+		if(nh.version >= NIFVersion::V3_3_0_13)
 		{
 			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.version) : nh.version);
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_0_0_4))
+		if(nh.version >= NIFVersion::V20_0_0_4)
 		{
-			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(to_integral(nh.endian))
-				: to_integral(nh.endian));
+			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(ToIntegral(nh.endian))
+				: ToIntegral(nh.endian));
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_10_1_0_0))
+		if(nh.version >= NIFVersion::V10_1_0_0)
 		{
 			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.user_version_1) : nh.user_version_1);
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_3_3_0_13))
+		if(nh.version >= NIFVersion::V3_3_0_13)
 		{
 			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.num_blocks) : nh.num_blocks);
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_10_1_0_0))
+		if(nh.version >= NIFVersion::V10_1_0_0)
 		{
 			if(nh.user_version_1 >= 10 ||
-				((nh.user_version_1 == 1) && nh.version != to_integral(NIFVersion::VER_10_2_0_0)))
+				((nh.user_version_1 == 1) && nh.version != NIFVersion::V10_2_0_0))
 			{
 				WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.user_version_2) : nh.user_version_2);
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_30_0_0_2))
+		if(nh.version >= NIFVersion::V30_0_0_2)
 		{
 			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.unknown_int_2) : nh.unknown_int_2);
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_10_0_1_0))
+		if(nh.version >= NIFVersion::V10_0_1_0)
 		{
 			if(nh.user_version_1 == 10 ||
-				(nh.user_version_1 == 1 && nh.version != to_integral(NIFVersion::VER_10_2_0_0)))
+				(nh.user_version_1 == 1 && nh.version != NIFVersion::V10_2_0_0))
 			{
 				WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.export_info.unknown)
 					: nh.export_info.unknown);
@@ -193,12 +193,12 @@ namespace NIF
 			outf << nh.export_info;
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_2_0_7) && nh.user_version_2 == 130)
+		if(nh.version >= NIFVersion::V20_2_0_7 && nh.user_version_2 == 130)
 		{
 			WriteByteString(outf, nh.export_info_3);
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_10_1_0_0))
+		if(nh.version >= NIFVersion::V10_1_0_0)
 		{
 			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.num_block_type) : nh.num_block_type);
 			for(auto itr : nh.block_type_names)
@@ -211,7 +211,7 @@ namespace NIF
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_2_0_7))
+		if(nh.version >= NIFVersion::V20_2_0_7)
 		{
 			for(auto itr : nh.block_size)
 			{
@@ -219,7 +219,7 @@ namespace NIF
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_1_0_3))
+		if(nh.version >= NIFVersion::V20_1_0_3)
 		{
 			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.num_strings) : nh.num_strings);
 			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.max_string_length)
@@ -230,7 +230,7 @@ namespace NIF
 			}
 		}
 
-		if(nh.version >= to_integral(NIFVersion::VER_20_1_0_3))
+		if(nh.version >= NIFVersion::V20_1_0_3)
 		{
 			WriteUnsignedIntegral(outf, diff_endian ? EndianSwap(nh.unknown_int_2) : nh.unknown_int_2);
 		}

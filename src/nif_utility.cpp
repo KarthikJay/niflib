@@ -45,7 +45,7 @@ namespace NIF
 		uint8_t length = line.length() + 1;
 		out << length;
 		out.write(line.data(), line.length());
-		out << static_cast<uint8_t>(0);
+		out << '\0';
 	}
 
 	void WriteIntString(ostream& out, const string& line)
@@ -53,6 +53,6 @@ namespace NIF
 		uint32_t length = line.length() + 1;
 		out << length;
 		out.write(line.data(), line.length());
-		out << static_cast<uint32_t>(0);
+		out << '\0';
 	}
 }

@@ -1,19 +1,20 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 #include "nif_api.hpp"
-#include "nif_utility.hpp"
 #include "nif_enum.hpp"
+#include "nif_utility.hpp"
 
 using namespace std;
 
 namespace NIF
 {
 	// ---Internal Helper functions---
-	uint ParseVersionString(string version_string)
+	uint32_t ParseVersionString(string version_string)
 	{
-		uint version = 0, num = 0;
+		uint32_t version = 0, num;
 		string::size_type start = 0, end, len;
 
 		//! \todo: Refactor this loop to be more explicit
@@ -36,8 +37,8 @@ namespace NIF
 			{
 				len = end - start;
 			}
-			stringstream ss(version_string.substr(start, len));
-			ss >> num;
+			//! \todo: Use http://en.cppreference.com/w/cpp/utility/from_chars when available
+			num = atoi(version_string.substr(start, len).data());
 			version |= num << offset * 8;
 			if(len == string::npos)
 			{
@@ -55,7 +56,7 @@ namespace NIF
 		uint32_t version_arr[4] = { byte_version[3], byte_version[2], byte_version[1], byte_version[0] };
 		stringstream out;
 
-		if(version >= to_integral(NIFVersion::VER_3_3_0_13))
+		if(version >= NIFVersion::V3_3_0_13)
 		{
 			out << version_arr[0] << "." << version_arr[1] << "." << version_arr[2] << "." << version_arr[3];
 		}
@@ -79,7 +80,7 @@ namespace NIF
 	{
 		stringstream header_line;
 
-		if(to_integral(version) <= to_integral(NIFVersion::VER_10_0_1_0))
+		if(version <= NIFVersion::V10_0_1_0)
 		{
 			header_line << "NetImmerse File Format, Version ";
 		}
@@ -87,7 +88,7 @@ namespace NIF
 		{
 			header_line << "Gamebryo File Format, Version ";
 		}
-		header_line << FormatVersionString(to_integral(version));
+		header_line << FormatVersionString(ToIntegral(version));
 		WriteLine(outf, header_line.str());
 	}
 
