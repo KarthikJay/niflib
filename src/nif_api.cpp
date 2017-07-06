@@ -2,6 +2,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>
+#include <string_view>
 
 #include "nif_api.hpp"
 #include "nif_enum.hpp"
@@ -14,38 +15,21 @@ namespace NIF
 	// ---Internal Helper functions---
 	uint32_t ParseVersionString(string version_string)
 	{
-		uint32_t version = 0, num;
+		uint32_t version = 0, num, offset = 24;
 		string::size_type start = 0, end, len;
+		string_view ver(version_string.data(), kMaxVersionStringLength);
 
-		//! \todo: Refactor this loop to be more explicit
-		for(int offset = 3; offset >= 0 && start < version_string.length(); --offset)
+		do
 		{
-			end = version_string.find_first_of(".", start);
-
-			if(end == string::npos)
-			{
-				if(offset > 0)
-				{
-					len = 1;
-				}
-				else
-				{
-					len = end;
-				}
-			}
-			else
-			{
-				len = end - start;
-			}
-			//! \todo: Use http://en.cppreference.com/w/cpp/utility/from_chars when available
-			num = atoi(version_string.substr(start, len).data());
-			version |= num << offset * 8;
-			if(len == string::npos)
-			{
-				break;
-			}
-			start = (end != string::npos) ? start + len + 1 : start + len;
+			end = ver.find_first_of(".", start);
+			len = end - start;
+			//! \todo: Use from_chars when available
+			num = atoi(ver.substr(start, len).data());
+			version |= num << offset;
+			offset -= 8;
+			start += len + 1;
 		}
+		while(end != string::npos && offset >= 0);
 
 		return version;
 	}
@@ -99,7 +83,7 @@ namespace NIF
 		uint32_t ver_str_offset = 0;
 		ifstream input(file_name, ifstream::binary);
 
-
+		//! \todo: Refactor checks into new function & increase performance
 		header_line = ReadLine(input);
 		if(header_line.substr(0,22) == "NetImmerse File Format")
 		{

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8.2)
+cmake_minimum_required(VERSION 3.9.0)
 
 # Name of project
 project(niflib)
@@ -23,9 +23,10 @@ option(OPTION_BUILD_TESTS		"Build tests."				ON)
 #option(OPTION_BUILD_EXAMPLES	"Build examples."			OFF)
 
 # Project properties
-set_property(GLOBAL	PROPERTY CMAKE_CXX_STANDARD				17)
-set_property(GLOBAL	PROPERTY CMAKE_CXX_STANDARD_REQUIRED	ON)
-set_property(GLOBAL PROPERTY CMAKE_CXX_VISIBILITY_PRESET	hidden)
+set(CMAKE_CXX_STANDARD			17)
+set(CMAKE_CXX_EXTENSIONS		OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED	ON)
+set(CMAKE_CXX_VISIBILITY_PRESET	hidden)
 
 # Set project endian type
 TEST_BIG_ENDIAN(endian_type)
@@ -60,9 +61,9 @@ include(GoogleTest)
 	enable_testing()
 	include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-	add_executable(RunGetNifVersion test/get_nif_version_test.cpp)
-	target_link_libraries(RunGetNifVersion gtest gtest_main)
-	target_link_libraries(RunGetNifVersion niflib)
+	add_executable(GetNifVersionTest test/get_nif_version_test.cpp)
+	target_link_libraries(GetNifVersionTest gtest gtest_main)
+	target_link_libraries(GetNifVersionTest niflib)
 
-	add_test(get_nif_version RunGetNifVersion "${CMAKE_CURRENT_LIST_DIR}/data/")
+	add_test(get_nif_version GetNifVersionTest "${CMAKE_CURRENT_LIST_DIR}/data/")
 endif()

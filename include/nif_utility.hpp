@@ -48,6 +48,8 @@ namespace NIF
 		return val;
 	}
 
+	const uint32_t kMaxVersionStringLength = 16;
+
 	//! \todo Figure out template way of Reading/Writing strings
 	//! ---NIF read utility functions---
 	//! \todo Add endianness support for reading strings (just the length part)
