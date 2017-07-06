@@ -1,4 +1,4 @@
-#include "gen/nif_header.hpp"
+#include "obj/nif_header.hpp"
 #include "nif_enum.hpp"
 #include "nif_utility.hpp"
 

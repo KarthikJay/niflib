@@ -8,7 +8,7 @@
 #include <array>
 
 #include "nif_enum.hpp"
-#include "gen/export_info.hpp"
+#include "obj/export_info.hpp"
 
 namespace NIF
 {

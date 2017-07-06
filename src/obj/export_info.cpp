@@ -1,6 +1,6 @@
 #include "nif_utility.hpp"
 
-#include "gen/export_info.hpp"
+#include "obj/export_info.hpp"
 
 using namespace std;
 
