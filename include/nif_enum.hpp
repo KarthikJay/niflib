@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <cstdint>
 #include <utility>
 #include <type_traits>
@@ -70,6 +71,16 @@ namespace NIF
 		ENDIAN_BIG,		//! The numbers are stored in big endian format.
 		ENDIAN_LITTLE	//! The numbers are stored in little endian format.
 	};
+
+	inline bool operator== (const EndianType lhs, const EndianType rhs)
+	{
+		return ToIntegral(lhs) == ToIntegral(rhs);
+	}
+
+	inline std::ostream& operator<< (std::ostream& out, const EndianType& et)
+	{
+		return out << (et == EndianType::ENDIAN_BIG ? "Big Endian" : "Little Endian");
+	}
 
 	inline bool operator== (const NIFVersion& v1, const uint32_t& v2)
 	{

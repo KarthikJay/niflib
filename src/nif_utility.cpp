@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "nif_utility.hpp"
 
 using namespace std;
@@ -16,7 +18,7 @@ namespace NIF
 	string ReadByteString(istream &in)
 	{
 		uint8_t length;
-		in >> length;
+		in.read(reinterpret_cast<char*>(&length), sizeof(length));
 		string buffer(length + 1, '\0');
 		in.read(&buffer[0], length);
 
@@ -26,7 +28,7 @@ namespace NIF
 	string ReadIntString(istream& in)
 	{
 		uint32_t length;
-		in >> length;
+		in.read(reinterpret_cast<char*>(&length), sizeof(length));
 		string buffer(length + 1, '\0');
 		in.read(&buffer[0], length);
 
@@ -34,25 +36,27 @@ namespace NIF
 	}
 
 	//! ---NIF write utility function implementations---
-	void WriteLine(ostream& out, string line)
+	void WriteLine(ostream& out, const string& line)
 	{
 		out.write(line.data(), line.length());
-		out << "\n";
+		out.put('\n');
 	}
 
 	void WriteByteString(ostream& out, const string& line)
 	{
 		uint8_t length = line.length() + 1;
-		out << length;
+
+		out.write(reinterpret_cast<char*>(length), sizeof(length));
 		out.write(line.data(), line.length());
-		out << '\0';
+		out.put('\0');
 	}
 
 	void WriteIntString(ostream& out, const string& line)
 	{
 		uint32_t length = line.length() + 1;
-		out << length;
+
+		out.write(reinterpret_cast<char*>(length), sizeof(length));
 		out.write(line.data(), line.length());
-		out << '\0';
+		out.put('\0');
 	}
 }

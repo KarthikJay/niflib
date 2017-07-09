@@ -1,8 +1,7 @@
 #pragma once
 
 #include <string>
-#include <fstream>
-#include <sstream>
+#include <iostream>
 #include <cstdint>
 #include <vector>
 #include <array>
@@ -16,6 +15,9 @@ namespace NIF
 	class NIF_API NIFHeader
 	{
 	public:
+		//! Header version string
+		std::string header_line;
+		//! \deprecated Only found in V3.1 and older
 		//! Copyright information
 		std::array<std::string, 3> copyright;
 		//! The NIF version in 32-bit hexadecimal notation
@@ -32,9 +34,8 @@ namespace NIF
 		uint32_t image_preview_size;
 		//! The endianness of the data in the file.
 		EndianType endian;
+		//! Contains additional export tool information.
 		ExportInfo export_info;
-		//! Additional export info
-		std::string export_info_3;
 		//! Number of object types in this NIF
 		mutable uint16_t num_block_type;
 		//! Vector of all object type names used in this NIF
@@ -43,27 +44,27 @@ namespace NIF
 		std::vector<uint16_t> block_index;
 		//! Vector of block sizes in alignment with block_type_index
 		std::vector<uint32_t> block_size;
-		//! Number of strings
-		mutable uint32_t num_strings;
-		//! Max string length
-		uint32_t max_string_length;
-		//! Vector of strings
-		std::vector<std::string> strings;
+		//! Number of block names
+		mutable uint32_t num_block_names;
+		//! Max length of block names
+		uint32_t max_name_length;
+		//! Vector of block names
+		std::vector<std::string> block_names;
 		//! /note Unknown.
-		uint32_t unknown_int_2;
+		uint32_t unknown;
 
-		NIFHeader(uint32_t version);
+		NIFHeader();
 		//! Get the NIF version
 		//! \return The NIF version in 32-bit hexadecimal notation
 		uint32_t GetVersion();
+		//! Output NIFHeader as string
+		std::string str();
 	private:
 		//! Update num member variables from their vectors
 		void UpdateNums();
-		//! Output NIFHeader as string
-		friend std::stringstream& operator<< (std::stringstream& ss, const NIFHeader& nh);
 		//! Write NIFHeader to NIF binary
-		friend std::ofstream& operator<< (std::ofstream& outf, const NIFHeader& nh);
+		friend std::ostream& operator<<(std::ostream& out, const NIFHeader& obj);
 		//! Read NIFHeader from NIF binary
-		friend std::ifstream& operator>> (std::ifstream& inf, NIFHeader& nh);
+		friend std::istream& operator>>(std::istream& in, NIFHeader& obj);
 	};
 }

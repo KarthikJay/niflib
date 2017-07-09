@@ -58,8 +58,8 @@ namespace NIF
 	std::string ReadIntString(std::istream& in);
 
 	//! ---NIF write utility functions---
-	//! \todo Add endianness support for writing strings (just the length part)
-	void WriteLine(std::ostream& out, std::string line);
+	void WriteLine(std::ostream& out, const std::string& line);
 	void WriteByteString(std::ostream& out, const std::string& line);
+	//! \todo Add endianness support for writing strings (just the length part)
 	void WriteIntString(std::ostream& out, const std::string& line);
 }

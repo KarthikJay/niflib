@@ -20,7 +20,7 @@ file(GLOB_RECURSE LIB_HEADERS "src/*.hpp")
 option(BUILD_SHARED_LIBS		"Build a shared library."	ON)
 option(BUILD_TESTS				"Build tests."				ON)
 #option(BUILD_DOCS				"Build documentation."		OFF)
-#option(BUILD_EXAMPLES			"Build examples."			OFF)
+option(BUILD_EXAMPLES			"Build examples."			ON)
 
 # Project properties
 set(CMAKE_CXX_STANDARD			17)
@@ -42,20 +42,30 @@ include_directories("include/")
 # Library target
 add_library(niflib ${LIB_SOURCES} ${LIB_HEADERS})
 
-# OS specific options
-if(WIN32)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4996")
-else()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+# Check build settings
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Compiler specific options
-if(CMAKE_COMPILER_IS_GNUCXX)
-	# set(CMAKE_CXX_FLAGS "-O2") # Optimize Level 2
+# OS & compiler specific options
+if(WIN32)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall")
+	set(CMAKE_CXX_FLAGS_RELEASE "/Ox")
+	set(CMAKE_CXX_FLAGS_RELEASE "/Zi")
+else(UNIX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+	set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+	set(CMAKE_CXX_FLAGS_DEBUG "-g")
 endif()
 
 # Option settings
-if(OPTION_BUILD_TESTS)
+if(BUILD_EXAMPLES)
+	# Example program to dump a NIF into human readable text format.
+	add_executable(NIFtoText examples/text_dump.cpp)
+	target_link_libraries(NIFtoText niflib)
+endif()
+
+if(BUILD_TESTS)
 include(GoogleTest)
 	add_subdirectory(lib/googletest)
 	enable_testing()

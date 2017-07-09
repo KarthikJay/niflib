@@ -29,7 +29,7 @@ namespace NIF
 			offset -= 8;
 			start += len + 1;
 		}
-		while(end != string::npos && offset >= 0);
+		while(end != string::npos);
 
 		return version;
 	}
@@ -37,46 +37,48 @@ namespace NIF
 	std::string FormatVersionString(uint32_t version)
 	{
 		uint8_t* byte_version = reinterpret_cast<uint8_t*>(&version);
-		uint32_t version_arr[4] = { byte_version[3], byte_version[2], byte_version[1], byte_version[0] };
-		stringstream out;
+		uint32_t version_arr[4] = { byte_version[3], byte_version[2],
+									byte_version[1], byte_version[0] };
+		string version_string = to_string(version_arr[0]) + "." + to_string(version_arr[1]);
 
 		if(version >= NIFVersion::V3_3_0_13)
 		{
-			out << version_arr[0] << "." << version_arr[1] << "." << version_arr[2] << "." << version_arr[3];
+			version_string	+= "." + to_string(version_arr[2]) + "." + to_string(version_arr[3]);
 		}
 		else
 		{
-			out << version_arr[0] << "." << version_arr[1];
 			if(version_arr[2])
 			{
-				out << version_arr[2];
+				version_string += "." + to_string(version_arr[2]);
 			}
 			if(version_arr[3])
 			{
-				out << version_arr[3];
+				version_string += "." + to_string(version_arr[3]);
 			}
 		}
 
-		return out.str();
+		return version_string;
 	}
 
-	void SetNifVersion(ofstream& outf, NIFVersion version)
+	std::string GetNifHeaderLine(NIFVersion version)
 	{
-		stringstream header_line;
+		string header_line;
 
+		header_line.reserve(45);
 		if(version <= NIFVersion::V10_0_1_0)
 		{
-			header_line << "NetImmerse File Format, Version ";
+			header_line = "NetImmerse File Format, Version ";
 		}
 		else
 		{
-			header_line << "Gamebryo File Format, Version ";
+			header_line = "Gamebryo File Format, Version ";
 		}
-		header_line << FormatVersionString(ToIntegral(version));
-		WriteLine(outf, header_line.str());
+		header_line += FormatVersionString(ToIntegral(version));
+		
+		return header_line;
 	}
 
-	// ---External API functions---
+	// ---API functions---
 	uint32_t GetNifVersion(const string& file_name)
 	{
 		std::string header_line;
@@ -105,11 +107,11 @@ namespace NIF
 
 	NIFHeader ReadHeaderInfo(const std::string &file_name)
 	{
-		uint32_t version = GetNifVersion(file_name);
-		NIFHeader header(version);
+		NIFHeader header;
 		ifstream input(file_name, ifstream::binary);
 
 		input >> header;
+		input.close();
 
 		return header;
 	}

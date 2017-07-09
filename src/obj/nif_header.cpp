@@ -1,3 +1,6 @@
+#include <iomanip>
+#include <sstream>
+
 #include "obj/nif_header.hpp"
 #include "nif_enum.hpp"
 #include "nif_utility.hpp"
@@ -6,229 +9,277 @@ using namespace std;
 
 namespace NIF
 {
-	NIFHeader::NIFHeader(uint32_t version)
+	NIFHeader::NIFHeader()
 	{
-		this->version = version;
+		header_line.reserve(45);
+		this->version = ToIntegral(NIFVersion::V4_0_0_2);
+		this->user_version_1 = 0;
 		endian = EndianType::ENDIAN_LITTLE;
 	}
 
-	//! \todo Remove endianness checks
-	ifstream& operator>> (ifstream& inf, NIFHeader& nh)
+	istream& operator>> (istream& in, NIFHeader& obj)
 	{
 		uint8_t test_byte;
 
-		if(nh.version <= NIFVersion::V3_1)
+		obj.header_line = ReadLine(in);
+
+		if(obj.version <= NIFVersion::V3_1)
 		{
-			for(auto itr : nh.copyright)
+			for(auto& itr : obj.copyright)
 			{
-				itr = ReadLine(inf);
+				itr = ReadLine(in);
 			}
 		}
 
-		if(nh.version >= NIFVersion::V20_0_0_4)
+		if(obj.version >= NIFVersion::V3_3_0_13)
 		{
-			inf >> test_byte;
-			nh.endian = static_cast<EndianType>(test_byte);
+			in.read(reinterpret_cast<char*>(&obj.version), sizeof(obj.version));
 		}
 
-		if(nh.version >= NIFVersion::V10_1_0_0)
+		if(obj.version >= NIFVersion::V20_0_0_4)
 		{
-			inf >> nh.user_version_1;
+			in.read(reinterpret_cast<char*>(&test_byte), sizeof(test_byte));
+			obj.endian = static_cast<EndianType>(test_byte);
 		}
 
-		if(nh.version >= NIFVersion::V20_0_0_4)
+		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
-			inf >> nh.num_blocks;
+			in.read(reinterpret_cast<char*>(&obj.user_version_1), sizeof(obj.user_version_1));
 		}
 
-		if(nh.version >= NIFVersion::V10_1_0_0)
+		if(obj.version >= NIFVersion::V20_0_0_4)
 		{
-			if(nh.user_version_1 >= 10 ||
-				((nh.user_version_1 == 1) && nh.version != NIFVersion::V10_2_0_0))
+			in.read(reinterpret_cast<char*>(&obj.num_blocks), sizeof(obj.num_blocks));
+		}
+
+		if(obj.version >= NIFVersion::V10_1_0_0)
+		{
+			if(obj.user_version_1 >= 10 ||
+				((obj.user_version_1 == 1) && obj.version != NIFVersion::V10_2_0_0))
 			{
-				inf >> nh.user_version_2;
+				in.read(reinterpret_cast<char*>(&obj.user_version_2), sizeof(obj.user_version_2));
 			}
 		}
 
-		if(nh.version >= NIFVersion::V30_0_0_2)
+		if(obj.version >= NIFVersion::V30_0_0_2)
 		{
-			inf >> nh.unknown_int_2;
+			in.read(reinterpret_cast<char*>(&obj.unknown), sizeof(obj.unknown));
 		}
 
-		if(nh.version >= NIFVersion::V10_0_1_0)
+		if(obj.version >= NIFVersion::V10_0_1_0)
 		{
-			if((nh.user_version_1 = 10) ||
-				((nh.user_version_1 = 1) && nh.version != NIFVersion::V10_2_0_0))
+			if((obj.user_version_1 == 10) ||
+				((obj.user_version_1 == 1) && obj.version != NIFVersion::V10_2_0_0))
 			{
-				inf >> nh.export_info.unknown;
+				in.read(reinterpret_cast<char*>(&obj.export_info.unknown), sizeof(obj.export_info.unknown));
+				in >> obj.export_info.unknown;
 			}
-			inf >> nh.export_info;
-		}
-
-		if(nh.version >= NIFVersion::V20_2_0_7 && nh.user_version_2 == 130)
-		{
-			nh.export_info_3 = ReadByteString(inf);
-		}
-
-		if(nh.version >= NIFVersion::V10_1_0_0)
-		{
-			inf >> nh.num_block_type;
-			nh.block_type_names.resize(nh.num_block_type);
-			for(auto itr : nh.block_type_names)
+			if(obj.version >= NIFVersion::V20_2_0_7 && obj.user_version_2 == 130)
 			{
-				itr = ReadIntString(inf);
+				obj.export_info.use_extra = true;
 			}
-			nh.block_index.resize(nh.num_blocks);
-			for(auto itr : nh.block_index)
-			{
-				inf >> itr;
-			}
+			in >> obj.export_info;
 		}
 
-		if(nh.version >= NIFVersion::V20_2_0_7)
+		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
-			nh.block_size.resize(nh.num_blocks);
-			for(auto itr : nh.block_size)
+			in.read(reinterpret_cast<char*>(&obj.num_block_type), sizeof(obj.num_block_type));
+			obj.block_type_names.resize(obj.num_block_type);
+			for(auto& itr : obj.block_type_names)
 			{
-				inf >> itr;
+				itr = ReadIntString(in);
+			}
+			obj.block_index.resize(obj.num_blocks);
+			for(auto& itr : obj.block_index)
+			{
+				in.read(reinterpret_cast<char*>(&itr), sizeof(itr));
 			}
 		}
 
-		if(nh.version >= NIFVersion::V20_1_0_3)
+		if(obj.version >= NIFVersion::V20_2_0_7)
 		{
-			inf >> nh.num_strings;
-			inf >> nh.max_string_length;
-			nh.strings.resize(nh.num_strings);
-			for(auto itr : nh.strings)
+			obj.block_size.resize(obj.num_blocks);
+			for(auto& itr : obj.block_size)
 			{
-				itr = ReadIntString(inf);
+				in.read(reinterpret_cast<char*>(&itr), sizeof(itr));
 			}
 		}
 
-		if(nh.version >= NIFVersion::V20_1_0_3)
+		if(obj.version >= NIFVersion::V20_1_0_3)
 		{
-			inf >> nh.unknown_int_2;
+			in.read(reinterpret_cast<char*>(&obj.num_block_names), sizeof(obj.num_block_names));
+			in.read(reinterpret_cast<char*>(&obj.max_name_length), sizeof(obj.max_name_length));
+			obj.block_names.resize(obj.num_block_names);
+			for(auto& itr : obj.block_names)
+			{
+				itr.reserve(obj.max_name_length + 1);
+				itr = ReadIntString(in);
+			}
 		}
 
-		return inf;
+		if(obj.version >= NIFVersion::V20_1_0_3)
+		{
+			in.read(reinterpret_cast<char*>(&obj.unknown), sizeof(obj.unknown));
+		}
+		return in;
 	}
 
 	void NIFHeader::UpdateNums()
 	{
-		num_strings = strings.size();
+		num_block_names = block_names.size();
 		num_block_type = block_type_names.size();
 		num_blocks = block_index.size();
 	}
 
-	ofstream& operator<< (ofstream& outf, const NIFHeader& nh)
+	ostream& operator<<(ostream& out, const NIFHeader& obj)
 	{
-		if(nh.version >= NIFVersion::V3_1)
+
+		WriteLine(out, obj.header_line);
+
+		if(obj.version >= NIFVersion::V3_1)
 		{
-			for(auto itr : nh.copyright)
+			for(const auto& itr : obj.copyright)
 			{
-				outf << itr << "/n";
+				out << itr << "/n";
 			}
 		}
 		
-		if(nh.version >= NIFVersion::V3_3_0_13)
+		if(obj.version >= NIFVersion::V3_3_0_13)
 		{
-			WriteUnsignedIntegral(outf, nh.version);
+			WriteUnsignedIntegral(out, obj.version);
 		}
 
-		if(nh.version >= NIFVersion::V20_0_0_4)
+		if(obj.version >= NIFVersion::V20_0_0_4)
 		{
-			WriteUnsignedIntegral(outf, ToIntegral(nh.endian));
+			WriteUnsignedIntegral(out, ToIntegral(obj.endian));
 		}
 
-		if(nh.version >= NIFVersion::V10_1_0_0)
+		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
-			WriteUnsignedIntegral(outf, nh.user_version_1);
+			WriteUnsignedIntegral(out, obj.user_version_1);
 		}
 
-		if(nh.version >= NIFVersion::V3_3_0_13)
+		if(obj.version >= NIFVersion::V3_3_0_13)
 		{
-			WriteUnsignedIntegral(outf, nh.num_blocks);
+			WriteUnsignedIntegral(out, obj.num_blocks);
 		}
 
-		if(nh.version >= NIFVersion::V10_1_0_0)
+		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
-			if(nh.user_version_1 >= 10 ||
-				((nh.user_version_1 == 1) && nh.version != NIFVersion::V10_2_0_0))
+			if(obj.user_version_1 >= 10 ||
+				((obj.user_version_1 == 1) && obj.version != NIFVersion::V10_2_0_0))
 			{
-				WriteUnsignedIntegral(outf, nh.user_version_2);
+				WriteUnsignedIntegral(out, obj.user_version_2);
 			}
 		}
 
-		if(nh.version >= NIFVersion::V30_0_0_2)
+		if(obj.version >= NIFVersion::V30_0_0_2)
 		{
-			WriteUnsignedIntegral(outf, nh.unknown_int_2);
+			WriteUnsignedIntegral(out, obj.unknown);
 		}
 
-		if(nh.version >= NIFVersion::V10_0_1_0)
+		if(obj.version >= NIFVersion::V10_0_1_0)
 		{
-			if(nh.user_version_1 == 10 ||
-				(nh.user_version_1 == 1 && nh.version != NIFVersion::V10_2_0_0))
+			if(obj.user_version_1 == 10 ||
+				(obj.user_version_1 == 1 && obj.version != NIFVersion::V10_2_0_0))
 			{
-				WriteUnsignedIntegral(outf, nh.export_info.unknown);
+				WriteUnsignedIntegral(out, obj.export_info.unknown);
 			}
-			outf << nh.export_info;
+			out << obj.export_info;
 		}
 
-		if(nh.version >= NIFVersion::V20_2_0_7 && nh.user_version_2 == 130)
+		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
-			WriteByteString(outf, nh.export_info_3);
-		}
-
-		if(nh.version >= NIFVersion::V10_1_0_0)
-		{
-			WriteUnsignedIntegral(outf, nh.num_block_type);
-			for(auto itr : nh.block_type_names)
+			WriteUnsignedIntegral(out, obj.num_block_type);
+			for(const auto& itr : obj.block_type_names)
 			{
-				WriteIntString(outf, itr);
+				WriteIntString(out, itr);
 			}
-			for(auto itr : nh.block_index)
+			for(const auto& itr : obj.block_index)
 			{
-				WriteUnsignedIntegral(outf, itr);
+				WriteUnsignedIntegral(out, itr);
 			}
 		}
 
-		if(nh.version >= NIFVersion::V20_2_0_7)
+		if(obj.version >= NIFVersion::V20_2_0_7)
 		{
-			for(auto itr : nh.block_size)
+			for(const auto& itr : obj.block_size)
 			{
-				WriteUnsignedIntegral(outf, itr);
+				WriteUnsignedIntegral(out, itr);
 			}
 		}
 
-		if(nh.version >= NIFVersion::V20_1_0_3)
+		if(obj.version >= NIFVersion::V20_1_0_3)
 		{
-			WriteUnsignedIntegral(outf, nh.num_strings);
-			WriteUnsignedIntegral(outf, nh.max_string_length);
-			for(auto itr : nh.strings)
+			WriteUnsignedIntegral(out, obj.num_block_names);
+			WriteUnsignedIntegral(out, obj.max_name_length);
+			for(const auto& itr : obj.block_names)
 			{
-				WriteIntString(outf, itr);
+				WriteIntString(out, itr);
 			}
 		}
 
-		if(nh.version >= NIFVersion::V20_1_0_3)
+		if(obj.version >= NIFVersion::V20_1_0_3)
 		{
-			WriteUnsignedIntegral(outf, nh.unknown_int_2);
+			WriteUnsignedIntegral(out, obj.unknown);
 		}
 
-		return outf;
+		return out;
 	}
 
-	//! \todo Add fixed width formatting for pretty output
-	stringstream& operator<< (stringstream& ss, const NIFHeader& nh)
+	string NIFHeader::str()
 	{
-		ss << "Copyright: ";
-		for(auto itr : nh.copyright)
-		{
-			ss << "  " << itr;
-		}
-		ss << "Version: " << nh.version << endl;
+		stringstream ss;
+		uint32_t width = 23;
 
-		return ss;
+		ss << header_line << endl;
+		if(version <= NIFVersion::V3_1)
+		{
+			for(uint32_t i = 0; i < copyright.size(); ++i)
+			{
+				ss	<< setw(width) << "Copyright [" + to_string(i + 1) + "]: "
+					<< copyright[i] << endl;
+			}
+		}
+		ss << setw(width) << "Version: " << hex << version << dec << endl;
+		ss << setw(width) << "Endian Type: " << endian << endl;
+		ss << setw(width) << "User Version 1: " << user_version_1 << endl;
+		ss << setw(width) << "Number of blocks: " << num_blocks << endl;
+		if(user_version_1 >= 10 ||
+				((user_version_1 == 1) && version != NIFVersion::V10_2_0_0))
+		{
+			ss << setw(width) << "User Version 2: " << user_version_2 << endl;
+		}
+		ss << export_info.str();
+		ss << setw(width) << "Number of Block Types: " << num_block_type << endl;
+		for(uint32_t i = 0; i < num_block_type; ++i)
+		{
+			ss	<< setw(width) << "Block Type Name[" + to_string(i) + "]: "
+				<< block_type_names[i] << endl;
+		}
+		for(uint32_t i = 0; i < num_blocks; ++i)
+		{
+			ss	<< setw(width) << "Block Index[" + to_string(i) + "]: "
+				<< block_type_names[block_index[i]] << endl;
+		}
+		for(uint32_t i = 0; i < num_blocks; ++i)
+		{
+			ss	<< setw(width) << "Block Size[" + to_string(i) + "]: "
+				<< block_size[i] << endl;
+		}
+		ss << setw(width) << "Number of Block Names: " << num_block_names << endl;
+		ss << setw(width) << "Max Block Name Length: " << max_name_length << endl;
+		for(uint32_t i = 0; i < num_block_names; ++i)
+		{
+			ss	<< setw(width) << "Block Name[" + to_string(i + 1) + "]: "
+				<< block_names[i] << endl;
+		}
+		if(version >= NIFVersion::V20_1_0_3)
+		{
+			ss << setw(width) << "Uknown Integer: " << unknown << endl;
+		}
+
+		return ss.str();
 	}
 
 	uint32_t NIFHeader::GetVersion()

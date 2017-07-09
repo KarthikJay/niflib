@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdint>
 #include <fstream>
-#include <sstream>
+#include <array>
 
 #include "export_visibility.hpp"
 
@@ -18,18 +18,19 @@ namespace NIF
 		uint32_t unknown;
 		//! Name of creator of the NIF
 		std::string creator;
-		//! Name of export tool to create NIF
-		std::string export_info_1;
-		//! Additional information on the export tool that created the NIF
-		std::string export_info_2;
+		//! Additional information strings about export tool that created the NIF
+		std::array<std::string, 3> info;
+		//! Declares if additional information strings are used
+		bool use_extra;
 
 		ExportInfo();
-	private:
 		//! Output ExportInfo as string
-		friend std::stringstream& operator<< (std::stringstream& ss, const ExportInfo& nh);
+		std::string str();
+	private:
+		const uint32_t kOldInfoSize = 2;
 		//! Write ExportInfo to NIF binary
-		friend std::ofstream& operator<< (std::ofstream& outf, const ExportInfo& nh);
+		friend std::ostream& operator<<(std::ostream& out, const ExportInfo& obj);
 		//! Read ExportInfo from NIF binary
-		friend std::ifstream& operator>> (std::ifstream& inf, ExportInfo& nh);
+		friend std::istream& operator>>(std::istream& in, ExportInfo& obj);
 	};
 }
