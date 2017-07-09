@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "obj/nif_header.hpp"
+#include "nif_header.hpp"
 #include "nif_enum.hpp"
 #include "nif_utility.hpp"
 

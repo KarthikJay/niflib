@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include "export_visibility.hpp"
-#include "obj/nif_header.hpp"
+#include "nif_header.hpp"
 
 namespace NIF
 {

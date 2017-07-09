@@ -2,7 +2,7 @@
 #include <sstream>
 
 #include "nif_utility.hpp"
-#include "obj/export_info.hpp"
+#include "export_info.hpp"
 
 using namespace std;
 
