@@ -7,13 +7,15 @@
 #include <type_traits>
 #include <utility>
 
+#include "nif_enum.hpp"
+
 namespace NIF
 {
 	//! ---NIF read utility constants---
 	const uint32_t kLineBufferSize = 256;
+	const uint32_t kMaxVersionStringLength = 16;
 
 	//! ---NIF general utility functions---
-
 	//! Fold expressions not available in MSVC 15.3
 	//! https://blogs.msdn.microsoft.com/vcblog/2017/05/10/c17-features-in-vs-2017-3/
 	//! Source taken from: https://goo.gl/d8QpCg
@@ -48,7 +50,9 @@ namespace NIF
 		return val;
 	}
 
-	const uint32_t kMaxVersionStringLength = 16;
+	uint32_t ParseVersionString(std::string version_string);
+	std::string FormatVersionString(uint32_t version);
+	std::string GetNifHeaderLine(NIFVersion version);
 
 	//! \todo Figure out template way of Reading/Writing strings
 	//! ---NIF read utility functions---
