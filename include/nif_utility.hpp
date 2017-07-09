@@ -43,11 +43,9 @@ namespace NIF
 	}
 
 	template<class T>
-	constexpr typename std::enable_if<std::is_unsigned<T>::value, T>::type
-	WriteUnsignedIntegral(std::ostream& out, T val)
+	void WriteUnsignedIntegral(std::ostream& out, T val)
 	{
-		out.write(reinterpret_cast<char*>(&val), static_cast<std::streamsize>(val));
-		return val;
+		out.write(reinterpret_cast<char*>(&val), static_cast<std::streamsize>(sizeof(val)));
 	}
 
 	uint32_t ParseVersionString(std::string version_string);

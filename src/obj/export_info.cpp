@@ -11,6 +11,10 @@ namespace NIF
 	ExportInfo::ExportInfo()
 	{
 		unknown = 3;
+		for(auto itr : info)
+		{
+			itr = "";
+		}
 		use_extra = false;
 	}
 

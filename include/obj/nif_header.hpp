@@ -63,8 +63,8 @@ namespace NIF
 		//! Update num member variables from their vectors
 		void UpdateNums();
 		//! Write NIFHeader to NIF binary
-		friend std::ostream& operator<<(std::ostream& out, const NIFHeader& obj);
+		NIF_API friend std::ostream& operator<<(std::ostream& out, const NIFHeader& obj);
 		//! Read NIFHeader from NIF binary
-		friend std::istream& operator>>(std::istream& in, NIFHeader& obj);
+		NIF_API friend std::istream& operator>>(std::istream& in, NIFHeader& obj);
 	};
 }

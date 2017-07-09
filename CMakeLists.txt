@@ -63,6 +63,10 @@ if(BUILD_EXAMPLES)
 	# Example program to dump a NIF into human readable text format.
 	add_executable(NIFtoText examples/text_dump.cpp)
 	target_link_libraries(NIFtoText niflib)
+
+	# Example program to create a copy of a NIF
+	add_executable(NIFCopy examples/nif_copy.cpp)
+	target_link_libraries(NIFCopy niflib)
 endif()
 
 if(BUILD_TESTS)

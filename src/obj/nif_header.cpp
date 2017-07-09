@@ -136,10 +136,11 @@ namespace NIF
 
 		WriteLine(out, obj.header_line);
 
-		if(obj.version >= NIFVersion::V3_1)
+		if(obj.version <= NIFVersion::V3_1)
 		{
 			for(const auto& itr : obj.copyright)
 			{
+				//Call WriteLine here!
 				out << itr << "/n";
 			}
 		}

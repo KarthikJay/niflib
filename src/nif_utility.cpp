@@ -38,26 +38,24 @@ namespace NIF
 	//! ---NIF write utility function implementations---
 	void WriteLine(ostream& out, const string& line)
 	{
-		out.write(line.data(), line.length());
+		out.write(line.data(), sizeof(line.data() - 1));
 		out.put('\n');
 	}
 
 	void WriteByteString(ostream& out, const string& line)
 	{
-		uint8_t length = line.length() + 1;
+		uint8_t length = strlen(line.data());
 
-		out.write(reinterpret_cast<char*>(length), sizeof(length));
-		out.write(line.data(), line.length());
-		out.put('\0');
+		out.write(reinterpret_cast<char*>(&length), sizeof(length));
+		out.write(line.data(), length);
 	}
 
 	void WriteIntString(ostream& out, const string& line)
 	{
-		uint32_t length = line.length() + 1;
+		uint32_t length = strlen(line.data());
 
-		out.write(reinterpret_cast<char*>(length), sizeof(length));
-		out.write(line.data(), line.length());
-		out.put('\0');
+		out.write(reinterpret_cast<char*>(&length), sizeof(length));
+		out.write(line.data(), length);
 	}
 
 	//! --- NIF general utility function implementations---

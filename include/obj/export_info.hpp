@@ -29,8 +29,8 @@ namespace NIF
 	private:
 		const uint32_t kOldInfoSize = 2;
 		//! Write ExportInfo to NIF binary
-		friend std::ostream& operator<<(std::ostream& out, const ExportInfo& obj);
+		NIF_API friend std::ostream& operator<<(std::ostream& out, const ExportInfo& obj);
 		//! Read ExportInfo from NIF binary
-		friend std::istream& operator>>(std::istream& in, ExportInfo& obj);
+		NIF_API friend std::istream& operator>>(std::istream& in, ExportInfo& obj);
 	};
 }
