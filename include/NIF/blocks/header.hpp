@@ -15,9 +15,6 @@ namespace NIF
 	class NIF_API ExportInfo
 	{
 	public:
-		//! Probably the number of strings that follow. 
-		//! \deprecated Field only found in NIF version 10.0.1.2 and below 
-		uint32_t unknown;
 		//! Name of the creator of the NIF
 		std::string creator;
 		//! Additional information strings about export tool that created the NIF

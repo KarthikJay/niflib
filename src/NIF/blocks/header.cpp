@@ -11,7 +11,6 @@ namespace NIF
 
 	ExportInfo::ExportInfo()
 	{
-		unknown = 3;
 		for(auto itr : info)
 		{
 			itr = "";
@@ -120,12 +119,6 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V10_0_1_0)
 		{
-			if((obj.user_version_1 == 10) ||
-				((obj.user_version_1 == 1) && obj.version != NIFVersion::V10_2_0_0))
-			{
-				in.read(reinterpret_cast<char*>(&obj.export_info.unknown), sizeof(obj.export_info.unknown));
-				in >> obj.export_info.unknown;
-			}
 			if(obj.version >= NIFVersion::V20_2_0_7 && obj.user_version_2 == 130)
 			{
 				obj.export_info.use_extra = true;
@@ -231,11 +224,6 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V10_0_1_0)
 		{
-			if(obj.user_version_1 == 10 ||
-				(obj.user_version_1 == 1 && obj.version != NIFVersion::V10_2_0_0))
-			{
-				WriteUnsignedIntegral(out, obj.export_info.unknown);
-			}
 			out << obj.export_info;
 		}
 
