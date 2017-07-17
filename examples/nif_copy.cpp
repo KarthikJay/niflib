@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 	}
 
 	ofstream output(argv[2], ofstream::binary);
-	NIFHeader header = ReadHeaderInfo(argv[1]);
+	Header header = ReadHeaderInfo(argv[1]);
 	output << header;
 	output.close();
 

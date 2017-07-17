@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	NIFHeader header = ReadHeaderInfo(argv[1]);
+	Header header = ReadHeaderInfo(argv[1]);
 	cout << header.str();
 
 	return EXIT_SUCCESS;

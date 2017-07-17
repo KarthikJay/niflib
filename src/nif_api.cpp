@@ -2,7 +2,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>
-#include <string_view>
 
 #include "nif_api.hpp"
 #include "nif_enum.hpp"
@@ -16,37 +15,37 @@ namespace NIF
 	uint32_t GetNifVersion(const string& file_name)
 	{
 		std::string header_line;
-		uint32_t ver_str_offset = 0;
+		uint32_t ver_str_offset;
 		ifstream input(file_name, ifstream::binary);
 
-		//! \todo: Refactor checks into new function & increase performance
 		header_line = ReadLine(input);
-		if(header_line.substr(0,22) == "NetImmerse File Format")
-		{
-			ver_str_offset = 32;
-		}
-		else if(header_line.substr(0, 20) == "Gamebryo File Format" ||
-				header_line.substr(0, 6) == "NDSNIF")
-		{
-			ver_str_offset = 30;
-		}
-		else
-		{
-			throw runtime_error("Not a valid NIF");
-		}
 		input.close();
+		ver_str_offset = ValidNIF(header_line);
+		header_line = header_line.substr(ver_str_offset);
 
-		return ParseVersionString(header_line.substr(ver_str_offset));
+		return ParseVersionString(header_line);
 	}
 
-	NIFHeader ReadHeaderInfo(const std::string &file_name)
+	Header ReadHeaderInfo(const string &file_name)
 	{
-		NIFHeader header;
+		Header header;
 		ifstream input(file_name, ifstream::binary);
 
 		input >> header;
 		input.close();
 
 		return header;
+	}
+
+	vector<shared_ptr<Object>> ReadNIFObjects(const string &file_name)
+	{
+		Header header;
+		vector<shared_ptr<Object>> nif_objects;
+		ifstream input(file_name, ifstream::binary);
+
+		input >> header;
+		nif_objects.resize(header.num_blocks);
+
+		return nif_objects;
 	}
 }

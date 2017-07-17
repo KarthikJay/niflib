@@ -14,6 +14,7 @@ namespace NIF
 	//! ---NIF read utility constants---
 	const uint32_t kLineBufferSize = 256;
 	const uint32_t kMaxVersionStringLength = 16;
+	const uint32_t kMaxHeaderStringLength = 22;
 
 	//! ---NIF general utility functions---
 	//! Fold expressions not available in MSVC 15.3
@@ -48,7 +49,8 @@ namespace NIF
 		out.write(reinterpret_cast<char*>(&val), static_cast<std::streamsize>(sizeof(val)));
 	}
 
-	uint32_t ParseVersionString(std::string version_string);
+	uint32_t ValidNIF(const std::string &header_line);
+	uint32_t ParseVersionString(const std::string& version_string);
 	std::string FormatVersionString(uint32_t version);
 	std::string GetNifHeaderLine(NIFVersion version);
 

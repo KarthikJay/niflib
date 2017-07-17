@@ -68,8 +68,34 @@ namespace NIF
 
 	enum class EndianType : uint8_t
 	{
-		ENDIAN_BIG,		//! The numbers are stored in big endian format.
-		ENDIAN_LITTLE	//! The numbers are stored in little endian format.
+		ENDIAN_BIG		= 0,//! The numbers are stored in big endian format.
+		ENDIAN_LITTLE	= 1//! The numbers are stored in little endian format.
+	};
+
+	enum class BSLightingShaderPropertyShaderType : uint32_t
+	{
+		DEFAULT								= 0,	//! Default
+		ENVIRONMENT_MAP						= 1,	//! Enables Environment Map
+		GLOW_MAP							= 2,	//! Enables Glow Map
+		HEIGHT_MAP							= 3,	//! Enables Height Map
+		FACE_TINT							= 4,	//! Enables SubSurface, Detail & Tint
+		SKIN_TINT							= 5,	//! Enables Skin Tint Color
+		HAIR_TINT							= 6,	//! Enables Hair Tint Color
+		PARALLAX_OCC						= 7,	//! Enables Height, Max Passes & Scale
+		MULTI_TEXTURE_LANDSCAPE				= 8,	//! Enables Multi-texture for landscapes
+		LOD_LANDSCAPE						= 9,	//! Enabled Level of Detail for landscapes
+		SNOW								= 10,	//! Enables Snow
+		MULTI_LAYER_PARALLAX				= 11,	//! Enables EnvMap Mask, Layer, Parallax Layer Thickness, Parallax Refraction Scale, Parallax Inner Layer U Scale, Parallax Inner Layer V Scale, EnvMap Scale
+		TREE_ANIM							= 12,	//! Enables Tree Animations
+		LOD_OBJECTS							= 13,	//! Enables Level of Detail for objects
+		MULTI_INDEX_TRISHAPE_SNOW			= 14,	//! Enables Snow Sparkles
+		LOD_OBJECTS_HD						= 15,	//! Enables Level of Detail in HD for objects
+		EYE									= 16,	//! Enables EnvMap Mask, Eye EnvMap Scale
+		CLOUD								= 17,	//! Enables Cloud
+		LOD_LANDSCAPE_NOISE					= 18,	//! Enables Level of Detail noise for landscapes
+		MULTI_TEXTURE_LANDSCAPE_LOD_BLEND	= 19,	//! Enables multi-texture Level of Detail blending for landscapes
+		DISMEMBERMENT						= 20,	//! Enables Dismemberment
+		COUNT								= 21	//! Enables Count
 	};
 
 	inline bool operator== (const EndianType lhs, const EndianType rhs)

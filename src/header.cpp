@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "nif_header.hpp"
+#include "header.hpp"
 #include "nif_enum.hpp"
 #include "nif_utility.hpp"
 
@@ -9,7 +9,7 @@ using namespace std;
 
 namespace NIF
 {
-	NIFHeader::NIFHeader()
+	Header::Header()
 	{
 		header_line.reserve(45);
 		this->version = ToIntegral(NIFVersion::V4_0_0_2);
@@ -17,11 +17,12 @@ namespace NIF
 		endian = EndianType::ENDIAN_LITTLE;
 	}
 
-	istream& operator>> (istream& in, NIFHeader& obj)
+	istream& operator>> (istream& in, Header& obj)
 	{
 		uint8_t test_byte;
 
 		obj.header_line = ReadLine(in);
+		ValidNIF(obj.header_line);
 
 		if(obj.version <= NIFVersion::V3_1)
 		{
@@ -109,11 +110,10 @@ namespace NIF
 		{
 			in.read(reinterpret_cast<char*>(&obj.num_block_names), sizeof(obj.num_block_names));
 			in.read(reinterpret_cast<char*>(&obj.max_name_length), sizeof(obj.max_name_length));
-			obj.block_names.resize(obj.num_block_names);
-			for(auto& itr : obj.block_names)
+			obj.block_names.reserve(obj.num_block_names);
+			for(uint32_t i = 0; i < obj.num_block_names; ++i)
 			{
-				itr.reserve(obj.max_name_length + 1);
-				itr = ReadIntString(in);
+				obj.block_names.push_back(ReadIntString(in));
 			}
 		}
 
@@ -124,14 +124,14 @@ namespace NIF
 		return in;
 	}
 
-	void NIFHeader::UpdateNums()
+	void Header::UpdateNums()
 	{
 		num_block_names = block_names.size();
 		num_block_type = block_type_names.size();
 		num_blocks = block_index.size();
 	}
 
-	ostream& operator<<(ostream& out, const NIFHeader& obj)
+	ostream& operator<<(ostream& out, const Header& obj)
 	{
 
 		WriteLine(out, obj.header_line);
@@ -140,8 +140,7 @@ namespace NIF
 		{
 			for(const auto& itr : obj.copyright)
 			{
-				//Call WriteLine here!
-				out << itr << "/n";
+				WriteLine(out, itr);
 			}
 		}
 		
@@ -228,9 +227,10 @@ namespace NIF
 		return out;
 	}
 
-	string NIFHeader::str()
+	string Header::str()
 	{
 		stringstream ss;
+		uint32_t idx = 0;
 		uint32_t width = 23;
 
 		ss << header_line << endl;
@@ -270,10 +270,9 @@ namespace NIF
 		}
 		ss << setw(width) << "Number of Block Names: " << num_block_names << endl;
 		ss << setw(width) << "Max Block Name Length: " << max_name_length << endl;
-		for(uint32_t i = 0; i < num_block_names; ++i)
+		for(const auto& itr : block_names)
 		{
-			ss	<< setw(width) << "Block Name[" + to_string(i + 1) + "]: "
-				<< block_names[i] << endl;
+			ss	<< setw(width) << "Block Name[" + to_string(++idx) + "]: " << itr << endl;
 		}
 		if(version >= NIFVersion::V20_1_0_3)
 		{
@@ -283,7 +282,7 @@ namespace NIF
 		return ss.str();
 	}
 
-	uint32_t NIFHeader::GetVersion()
+	uint32_t Header::GetVersion()
 	{
 		return version;
 	}

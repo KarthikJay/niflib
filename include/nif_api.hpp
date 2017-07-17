@@ -2,9 +2,12 @@
 
 #include <string>
 #include <cstdint>
+#include <memory>
+#include <vector>
 
 #include "export_visibility.hpp"
-#include "nif_header.hpp"
+#include "header.hpp"
+#include "interfaces/object.hpp"
 
 namespace NIF
 {
@@ -12,15 +15,18 @@ namespace NIF
 	//! if it is a valid NIF. Call this function prior to calling ReadNifList
 	//! or ReadNifTree, if you want to make sure that its NIF version is supported
 	//! before trying to read it.
-	//! \param file_name The name of the file to load, or the absolute path if it is not in the working directory.
+	//! \param[in] file_name - The absolute path to the NIF which includes the file name and the location of the NIF.
 	//! \return The version of the NIF, in 32-bit hexadecimal format. If the file is not a NIF, it returns VER_INVALID.
 	//! \throws RuntimeError If the file is not a valid NIF.
 	NIF_API uint32_t GetNifVersion(const std::string& file_name);
 
 	//! Returns the nif info without reading the entire file which includes the nif version,
 	//! the nif user version1 and the nif user version2
-	//! \param The absolute path to the NIF which includes the file name and the location of the NIF
+	//! \param[in] file_name - The absolute path to the NIF which includes the file name and the location of the NIF.
 	//! \return The nif info structure which contains the nif header info
-	NIF_API NIFHeader ReadHeaderInfo(const std::string &file_name);
+	NIF_API Header ReadHeaderInfo(const std::string &file_name);
 
+	NIF_API std::vector<std::shared_ptr<Object>> ReadNIFObjects(const std::string &file_name);
+
+	NIF_API std::shared_ptr<Object> ReadNIFTree(const std::string &filename);
 }

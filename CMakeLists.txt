@@ -44,7 +44,7 @@ add_library(niflib ${LIB_SOURCES} ${LIB_HEADERS})
 
 # Check build settings
 if(NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE Release)
+	set(CMAKE_BUILD_TYPE RELEASE)
 endif()
 
 # OS & compiler specific options

@@ -59,7 +59,29 @@ namespace NIF
 	}
 
 	//! --- NIF general utility function implementations---
-	uint32_t ParseVersionString(string version_string)
+	uint32_t ValidNIF(const string& header_line)
+	{
+		uint32_t ver_str_offset = 0;
+		string_view check(header_line.data(), kMaxHeaderStringLength);
+
+		if(check == "NetImmerse File Format")
+		{
+			ver_str_offset = 32;
+		}
+		else if(check.substr(0, 20) == "Gamebryo File Format" ||
+				check.substr(0, 6) == "NDSNIF")
+		{
+			ver_str_offset = 30;
+		}
+		else
+		{
+			throw runtime_error("Not a valid NIF");
+		}
+
+		return ver_str_offset;
+	}
+
+	uint32_t ParseVersionString(const string& version_string)
 	{
 		uint32_t version = 0, num, offset = 24;
 		string::size_type start = 0, end, len;
@@ -69,7 +91,8 @@ namespace NIF
 		{
 			end = ver.find_first_of(".", start);
 			len = end - start;
-			//! \todo: Use from_chars when available
+			//! \todo Use from_chars when available
+			//from_chars(ver[start], ver[len], &num);
 			num = atoi(ver.substr(start, len).data());
 			version |= num << offset;
 			offset -= 8;

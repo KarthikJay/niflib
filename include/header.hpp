@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdint>
 #include <vector>
+#include <unordered_set>
 #include <array>
 
 #include "nif_enum.hpp"
@@ -12,7 +13,7 @@
 namespace NIF
 {
 	//! \note NIFHeader is always in little endian.
-	class NIF_API NIFHeader
+	class NIF_API Header
 	{
 	public:
 		//! Header version string
@@ -50,10 +51,10 @@ namespace NIF
 		uint32_t max_name_length;
 		//! Vector of block names
 		std::vector<std::string> block_names;
-		//! /note Unknown.
+		//! /note Unknown int.
 		uint32_t unknown;
 
-		NIFHeader();
+		Header();
 		//! Get the NIF version
 		//! \return The NIF version in 32-bit hexadecimal notation
 		uint32_t GetVersion();
@@ -63,8 +64,8 @@ namespace NIF
 		//! Update num member variables from their vectors
 		void UpdateNums();
 		//! Write NIFHeader to NIF binary
-		NIF_API friend std::ostream& operator<<(std::ostream& out, const NIFHeader& obj);
+		NIF_API friend std::ostream& operator<<(std::ostream& out, const Header& obj);
 		//! Read NIFHeader from NIF binary
-		NIF_API friend std::istream& operator>>(std::istream& in, NIFHeader& obj);
+		NIF_API friend std::istream& operator>>(std::istream& in, Header& obj);
 	};
 }
