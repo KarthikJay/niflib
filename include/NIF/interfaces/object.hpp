@@ -20,6 +20,13 @@ namespace NIF
 		}
 		virtual ~Object() {};
 		virtual std::string str() const = 0;
+	protected:
+		uint32_t block_index;
+		std::shared_ptr<Header> header;
+
+		virtual std::ostream& write(std::ostream& out) const = 0;
+		virtual std::istream& read(std::istream& in) = 0;
+
 		NIF_API friend std::ostream& operator<<(std::ostream& out, const Object& nio)
 		{
 			return nio.write(out);
@@ -28,11 +35,5 @@ namespace NIF
 		{
 			return nio.read(in);
 		}
-	protected:
-		uint32_t block_index;
-		std::shared_ptr<Header> header;
-
-		virtual std::ostream& write(std::ostream& out) const = 0;
-		virtual std::istream& read(std::istream& in) = 0;
 	};
 }

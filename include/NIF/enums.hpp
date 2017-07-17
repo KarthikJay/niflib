@@ -43,7 +43,7 @@ namespace NIF
 		V4_2_0_2	= 0x04020002,	//! NIF Version 4.2.0.2
 		V4_2_1_0	= 0x04020100,	//! NIF Version 4.2.1.0
 		V4_2_2_0	= 0x04020200,	//! NIF Version 4.2.2.0
-		V5_0_0_6	= 0x05000006	//! NIF Version 5.0.0.6
+		V5_0_0_6	= 0x05000006,	//! NIF Version 5.0.0.6
 		V10_0_1_0	= 0x0A000100,	//! NIF Version 10.0.1.0
 		V10_0_1_2	= 0x0A000102,	//! NIF Version 10.0.1.2
 		V10_0_1_3	= 0x0A000103,	//! NIF Version 10.0.1.3

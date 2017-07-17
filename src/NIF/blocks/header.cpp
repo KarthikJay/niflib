@@ -115,7 +115,7 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V30_0_0_2)
 		{
-			in.read(reinterpret_cast<char*>(&obj.unknown), sizeof(obj.unknown));
+			in.read(reinterpret_cast<char*>(&obj.image_preview_size), sizeof(obj.image_preview_size));
 		}
 
 		if(obj.version >= NIFVersion::V10_0_1_0)
@@ -226,7 +226,7 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V30_0_0_2)
 		{
-			WriteUnsignedIntegral(out, obj.unknown);
+			WriteUnsignedIntegral(out, obj.image_preview_size);
 		}
 
 		if(obj.version >= NIFVersion::V10_0_1_0)
@@ -302,6 +302,10 @@ namespace NIF
 		{
 			ss << setw(width) << "User Version 2: " << user_version_2 << endl;
 		}
+		if(version >= NIFVersion::V30_0_0_2)
+		{
+			ss << setw(width) << "Image Preview Size: " << image_preview_size << endl;
+		}
 		ss << export_info.str();
 		ss << setw(width) << "Number of Block Types: " << num_block_type << endl;
 		for(uint32_t i = 0; i < num_block_type; ++i)
@@ -327,7 +331,7 @@ namespace NIF
 		}
 		if(version >= NIFVersion::V20_1_0_3)
 		{
-			ss << setw(width) << "Uknown Integer: " << unknown << endl;
+			ss << setw(width) << "Number of Groups: " << num_groups << endl;
 		}
 
 		return ss.str();
