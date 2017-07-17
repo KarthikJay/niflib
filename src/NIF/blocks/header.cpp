@@ -168,9 +168,9 @@ namespace NIF
 			}
 		}
 
-		if(obj.version >= NIFVersion::V20_1_0_3)
+		if(obj.version >= NIFVersion::V5_0_0_6)
 		{
-			in.read(reinterpret_cast<char*>(&obj.unknown), sizeof(obj.unknown));
+			in.read(reinterpret_cast<char*>(&obj.num_groups), sizeof(obj.num_groups));
 		}
 		return in;
 	}
@@ -270,9 +270,9 @@ namespace NIF
 			}
 		}
 
-		if(obj.version >= NIFVersion::V20_1_0_3)
+		if(obj.version >= NIFVersion::V5_0_0_6)
 		{
-			WriteUnsignedIntegral(out, obj.unknown);
+			WriteUnsignedIntegral(out, obj.num_groups);
 		}
 
 		return out;

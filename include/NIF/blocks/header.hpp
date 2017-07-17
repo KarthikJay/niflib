@@ -76,8 +76,8 @@ namespace NIF
 		uint32_t max_name_length;
 		//! Vector of block names
 		std::vector<std::string> block_names;
-		//! /note Unknown int.
-		uint32_t unknown;
+		//! Number of groups
+		uint32_t num_groups;
 
 		Header();
 		//! Get the NIF version
