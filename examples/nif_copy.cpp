@@ -2,7 +2,8 @@
 #include <fstream>
 #include <string>
 
-#include "nif_api.hpp"
+#include <NIF/api.hpp>
+#include <NIF/blocks/header.hpp>
 
 using namespace std;
 using namespace NIF;

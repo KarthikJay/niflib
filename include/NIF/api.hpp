@@ -5,12 +5,14 @@
 #include <memory>
 #include <vector>
 
-#include "export_visibility.hpp"
-#include "header.hpp"
-#include "interfaces/object.hpp"
+#include <NIF/export_visibility.hpp>
 
 namespace NIF
 {
+	//! Forward declarations
+	class Object;
+	class Header;
+
 	//! Reads the header of the given NIF by file name and returns the NIF version
 	//! if it is a valid NIF. Call this function prior to calling ReadNifList
 	//! or ReadNifTree, if you want to make sure that its NIF version is supported

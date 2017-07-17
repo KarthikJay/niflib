@@ -4,8 +4,8 @@
 #include <iostream>
 #include <memory>
 
-#include "export_info.hpp"
-#include "header.hpp"
+#include <NIF/blocks/header.hpp>
+#include <NIF/export_visibility.hpp>
 
 namespace NIF
 {

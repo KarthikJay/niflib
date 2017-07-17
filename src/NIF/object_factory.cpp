@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "object_factory.hpp"
+#include <NIF/object_factory.hpp>
 
 using namespace std;
 

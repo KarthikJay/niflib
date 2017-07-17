@@ -4,10 +4,10 @@
 #include <string>
 #include <memory>
 
-#include "export_info.hpp"
-#include "obj/extra_data.hpp"
-#include "interfaces/block_name.hpp"
-#include "object_factory.hpp"
+#include <NIF/interfaces/block_name.hpp>
+#include <NIF/blocks/extra_data.hpp>
+#include <NIF/export_visibility.hpp>
+#include <NIF/object_factory.hpp>
 
 namespace NIF
 {

@@ -5,8 +5,8 @@
 #include <memory>
 #include <functional>
 
-#include "interfaces/object.hpp"
-#include "header.hpp"
+#include <NIF/interfaces/object.hpp>
+#include <NIF/blocks/header.hpp>
 
 namespace NIF
 {

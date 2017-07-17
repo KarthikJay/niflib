@@ -68,8 +68,8 @@ namespace NIF
 
 	enum class EndianType : uint8_t
 	{
-		ENDIAN_BIG		= 0,//! The numbers are stored in big endian format.
-		ENDIAN_LITTLE	= 1//! The numbers are stored in little endian format.
+		ENDIAN_BIG		= 0,	//! The numbers are stored in big endian format.
+		ENDIAN_LITTLE	= 1		//! The numbers are stored in little endian format.
 	};
 
 	enum class BSLightingShaderPropertyShaderType : uint32_t

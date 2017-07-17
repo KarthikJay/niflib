@@ -4,9 +4,9 @@
 #include <string>
 #include <memory>
 
-#include "export_info.hpp"
-#include "interfaces/object.hpp"
-#include "object_factory.hpp"
+#include <NIF/interfaces/object.hpp>
+#include <NIF/export_visibility.hpp>
+#include <NIF/object_factory.hpp>
 
 namespace NIF
 {

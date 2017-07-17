@@ -1,6 +1,6 @@
 #include <cstring>
 
-#include "nif_utility.hpp"
+#include <NIF/utility.hpp>
 
 using namespace std;
 

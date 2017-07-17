@@ -1,8 +1,8 @@
 #include <string>
 #include <fstream>
 
-#include "gtest/gtest.h"
-#include "nif_api.hpp"
+#include <gtest/gtest.h>
+#include <NIF/api.hpp>
 
 using namespace std;
 

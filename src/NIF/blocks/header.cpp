@@ -1,14 +1,65 @@
 #include <iomanip>
 #include <sstream>
 
-#include "header.hpp"
-#include "nif_enum.hpp"
-#include "nif_utility.hpp"
+#include <NIF/blocks/header.hpp>
+#include <NIF/utility.hpp>
 
 using namespace std;
 
 namespace NIF
 {
+
+	ExportInfo::ExportInfo()
+	{
+		unknown = 3;
+		for(auto itr : info)
+		{
+			itr = "";
+		}
+		use_extra = false;
+	}
+
+	istream& operator>>(istream& in, ExportInfo& obj)
+	{
+		uint32_t num_info = obj.use_extra ? obj.info.max_size() : obj.kOldInfoSize;
+
+		obj.creator = ReadByteString(in);
+		for(uint32_t i = 0; i < num_info; ++i)
+		{
+			obj.info[i] = ReadByteString(in);
+		}
+
+		return in;
+	}
+
+	ostream& operator<<(ostream& out, const ExportInfo& obj)
+	{
+		uint32_t num_info = obj.use_extra ? obj.info.max_size() : obj.kOldInfoSize;
+
+		WriteByteString(out, obj.creator);
+		for(uint32_t i = 0; i < num_info; ++i)
+		{
+			WriteByteString(out, obj.info[i]);
+		}
+
+		return out;
+	}
+
+	string ExportInfo::str()
+	{
+		stringstream ss;
+		uint32_t width = 17;
+		uint32_t num_info = use_extra ? info.max_size() : kOldInfoSize;
+
+		ss << setw(width) << "Creator: " << creator << endl;
+		for(uint32_t i = 0; i < num_info; ++i)
+		{
+			ss << setw(width) << "Export Info [" + to_string(i + 1) + "]: " << info[i] << endl;
+		}
+
+		return ss.str();
+	}
+
 	Header::Header()
 	{
 		header_line.reserve(45);

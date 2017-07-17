@@ -3,9 +3,10 @@
 #include <stdexcept>
 #include <utility>
 
-#include "nif_api.hpp"
-#include "nif_enum.hpp"
-#include "nif_utility.hpp"
+#include <NIF/api.hpp>
+#include <NIF/blocks/header.hpp>
+#include <NIF/enums.hpp>
+#include <NIF/utility.hpp>
 
 using namespace std;
 

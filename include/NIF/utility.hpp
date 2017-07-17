@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "nif_enum.hpp"
+#include <NIF/enums.hpp>
 
 namespace NIF
 {

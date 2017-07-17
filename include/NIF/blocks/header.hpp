@@ -4,15 +4,40 @@
 #include <iostream>
 #include <cstdint>
 #include <vector>
-#include <unordered_set>
 #include <array>
 
-#include "nif_enum.hpp"
-#include "export_info.hpp"
+#include <NIF/enums.hpp>
+#include <NIF/export_visibility.hpp>
 
 namespace NIF
 {
-	//! \note NIFHeader is always in little endian.
+	//! Information about how the NIF was exported, part of the NIF header block.
+	class NIF_API ExportInfo
+	{
+	public:
+		//! Probably the number of strings that follow. 
+		//! \deprecated Field only found in NIF version 10.0.1.2 and below 
+		uint32_t unknown;
+		//! Name of the creator of the NIF
+		std::string creator;
+		//! Additional information strings about export tool that created the NIF
+		std::array<std::string, 3> info;
+		//! Declares if additional information strings are used
+		bool use_extra;
+
+		ExportInfo();
+		//! Output export information as string
+		std::string str();
+	private:
+		const uint32_t kOldInfoSize = 2;
+		//! Write export information to NIF binary
+		NIF_API friend std::ostream& operator<<(std::ostream& out, const ExportInfo& obj);
+		//! Read export information from NIF binary
+		NIF_API friend std::istream& operator>>(std::istream& in, ExportInfo& obj);
+	};
+
+
+	//! \note NIF header is always in little endian.
 	class NIF_API Header
 	{
 	public:

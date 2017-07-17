@@ -3,9 +3,9 @@
 #include <string>
 #include <iostream>
 
-#include "gtest/gtest.h"
-#include "nif_api.hpp"
-#include "nif_utility.hpp"
+#include <gtest/gtest.h>
+#include <NIF/api.hpp>
+#include <NIF/utility.hpp>
 
 using namespace NIF;
 using namespace std;

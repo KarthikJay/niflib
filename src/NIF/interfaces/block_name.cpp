@@ -1,8 +1,8 @@
 #include <algorithm>
 
-#include "interfaces/block_name.hpp"
-#include "nif_enum.hpp"
-#include "nif_utility.hpp"
+#include <NIF/interfaces/block_name.hpp>
+#include <NIF/enums.hpp>
+#include <NIF/utility.hpp>
 
 using namespace std;
 
@@ -33,7 +33,7 @@ namespace NIF
 
 	ostream& BlockName::write(ostream& out) const
 	{
-		bool use_old = header->version < ToIntegral(NIFVersion::V20_1_0_3);
+		bool use_old = header->version < NIFVersion::V20_1_0_3;
 
 		if(use_old)
 		{
@@ -49,7 +49,7 @@ namespace NIF
 
 	istream& BlockName::read(istream& in)
 	{
-		bool use_old = header->version < ToIntegral(NIFVersion::V20_1_0_3);
+		bool use_old = header->version < NIFVersion::V20_1_0_3;
 
 		if(use_old)
 		{

@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "interfaces/object.hpp"
-#include "export_info.hpp"
+#include <NIF/interfaces/object.hpp>
+#include <NIF/export_visibility.hpp>
 
 namespace NIF
 {
