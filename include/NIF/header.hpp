@@ -24,7 +24,7 @@ namespace NIF
 
 		ExportInfo();
 		//! Output export information as string
-		std::string str();
+		std::string ToString();
 	private:
 		const uint32_t kOldInfoSize = 2;
 		//! Write export information to NIF binary
@@ -47,8 +47,6 @@ namespace NIF
 		uint32_t version;
 		//! An extra version number for companies that decide to modify the file format.
 		uint32_t user_version_1;
-		//! Number of file objects
-		mutable uint32_t num_blocks;
 		//! An extra version number.
 		//! Possibly used by Bethesda to denote Havok version
 		uint32_t user_version_2;
@@ -59,16 +57,12 @@ namespace NIF
 		EndianType endian;
 		//! Contains additional export tool information.
 		ExportInfo export_info;
-		//! Number of object types in this NIF
-		mutable uint16_t num_block_type;
 		//! Vector of all object type names used in this NIF
 		std::vector<std::string> block_type_names;
-		//! Vector of block index in alignment with corresponding block type names
-		std::vector<uint16_t> block_index;
-		//! Vector of block sizes in alignment with block_type_index
-		std::vector<uint32_t> block_size;
-		//! Number of block names
-		mutable uint32_t num_block_names;
+		//! Vector of indices per block (in order) into #block_type_names
+		std::vector<uint16_t> block_type_index;
+		//! Vector of block sizes in alignment with #block_type_index
+		std::vector<uint32_t> block_sizes;
 		//! Max length of block names
 		uint32_t max_name_length;
 		//! Vector of block names
@@ -81,10 +75,8 @@ namespace NIF
 		//! \return The NIF version in 32-bit hexadecimal notation
 		uint32_t GetVersion();
 		//! Output NIFHeader as string
-		std::string str();
+		std::string ToString();
 	private:
-		//! Update num member variables from their vectors
-		void UpdateNums();
 		//! Write NIFHeader to NIF binary
 		NIF_API friend std::ostream& operator<<(std::ostream& out, const Header& obj);
 		//! Read NIFHeader from NIF binary

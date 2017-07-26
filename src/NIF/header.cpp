@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include <NIF/blocks/header.hpp>
+#include <NIF/header.hpp>
 #include <NIF/utility.hpp>
 
 using namespace std;
@@ -44,10 +44,10 @@ namespace NIF
 		return out;
 	}
 
-	string ExportInfo::str()
+	string ExportInfo::ToString()
 	{
 		stringstream ss;
-		uint32_t width = 17;
+		uint32_t width = 23;
 		uint32_t num_info = use_extra ? info.max_size() : kOldInfoSize;
 
 		ss << setw(width) << "Creator: " << creator << endl;
@@ -70,6 +70,7 @@ namespace NIF
 	istream& operator>> (istream& in, Header& obj)
 	{
 		uint8_t test_byte;
+		uint32_t vec_size;
 
 		obj.header_line = ReadLine(in);
 		ValidNIF(obj.header_line);
@@ -82,7 +83,7 @@ namespace NIF
 			}
 		}
 
-		if(obj.version >= NIFVersion::V3_3_0_13)
+		if(obj.version >= Version(3,3,0,13))
 		{
 			in.read(reinterpret_cast<char*>(&obj.version), sizeof(obj.version));
 		}
@@ -98,9 +99,11 @@ namespace NIF
 			in.read(reinterpret_cast<char*>(&obj.user_version_1), sizeof(obj.user_version_1));
 		}
 
-		if(obj.version >= NIFVersion::V20_0_0_4)
+		if(obj.version >= Version(3,3,0,13))
 		{
-			in.read(reinterpret_cast<char*>(&obj.num_blocks), sizeof(obj.num_blocks));
+			in.read(reinterpret_cast<char*>(&vec_size), sizeof(vec_size));
+			obj.block_sizes.resize(vec_size);
+			obj.block_type_index.resize(vec_size);
 		}
 
 		if(obj.version >= NIFVersion::V10_1_0_0)
@@ -128,14 +131,14 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
-			in.read(reinterpret_cast<char*>(&obj.num_block_type), sizeof(obj.num_block_type));
-			obj.block_type_names.resize(obj.num_block_type);
+			in.read(reinterpret_cast<char*>(&vec_size), sizeof(uint16_t));
+			obj.block_type_names.resize(vec_size);
+			cout << "Size of block_type_names: " << obj.block_type_names.size() << endl;
 			for(auto& itr : obj.block_type_names)
 			{
 				itr = ReadIntString(in);
 			}
-			obj.block_index.resize(obj.num_blocks);
-			for(auto& itr : obj.block_index)
+			for(auto& itr : obj.block_type_index)
 			{
 				in.read(reinterpret_cast<char*>(&itr), sizeof(itr));
 			}
@@ -143,8 +146,7 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V20_2_0_7)
 		{
-			obj.block_size.resize(obj.num_blocks);
-			for(auto& itr : obj.block_size)
+			for(auto& itr : obj.block_sizes)
 			{
 				in.read(reinterpret_cast<char*>(&itr), sizeof(itr));
 			}
@@ -152,27 +154,23 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V20_1_0_3)
 		{
-			in.read(reinterpret_cast<char*>(&obj.num_block_names), sizeof(obj.num_block_names));
+			in.read(reinterpret_cast<char*>(&vec_size), sizeof(vec_size));
 			in.read(reinterpret_cast<char*>(&obj.max_name_length), sizeof(obj.max_name_length));
-			obj.block_names.reserve(obj.num_block_names);
-			for(uint32_t i = 0; i < obj.num_block_names; ++i)
+			obj.block_names.resize(vec_size);
+			for(auto& itr : obj.block_names)
 			{
-				obj.block_names.push_back(ReadIntString(in));
+				itr = ReadIntString(in);
 			}
 		}
 
-		if(obj.version >= NIFVersion::V5_0_0_6)
+		if(obj.version >= Version(5,0,0,6))
 		{
 			in.read(reinterpret_cast<char*>(&obj.num_groups), sizeof(obj.num_groups));
 		}
-		return in;
-	}
 
-	void Header::UpdateNums()
-	{
-		num_block_names = block_names.size();
-		num_block_type = block_type_names.size();
-		num_blocks = block_index.size();
+		cout << "GOT HERE FINAL!" << endl;
+
+		return in;
 	}
 
 	ostream& operator<<(ostream& out, const Header& obj)
@@ -188,7 +186,7 @@ namespace NIF
 			}
 		}
 		
-		if(obj.version >= NIFVersion::V3_3_0_13)
+		if(obj.version >= Version(3,3,0,13))
 		{
 			WriteUnsignedIntegral(out, obj.version);
 		}
@@ -203,9 +201,9 @@ namespace NIF
 			WriteUnsignedIntegral(out, obj.user_version_1);
 		}
 
-		if(obj.version >= NIFVersion::V3_3_0_13)
+		if(obj.version >= Version(3,3,0,13))
 		{
-			WriteUnsignedIntegral(out, obj.num_blocks);
+			WriteUnsignedIntegral(out, obj.block_type_index.size());
 		}
 
 		if(obj.version >= NIFVersion::V10_1_0_0)
@@ -229,12 +227,12 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
-			WriteUnsignedIntegral(out, obj.num_block_type);
+			WriteUnsignedIntegral(out, obj.block_type_names.size());
 			for(const auto& itr : obj.block_type_names)
 			{
 				WriteIntString(out, itr);
 			}
-			for(const auto& itr : obj.block_index)
+			for(const auto& itr : obj.block_type_index)
 			{
 				WriteUnsignedIntegral(out, itr);
 			}
@@ -242,7 +240,7 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V20_2_0_7)
 		{
-			for(const auto& itr : obj.block_size)
+			for(const auto& itr : obj.block_sizes)
 			{
 				WriteUnsignedIntegral(out, itr);
 			}
@@ -250,7 +248,7 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V20_1_0_3)
 		{
-			WriteUnsignedIntegral(out, obj.num_block_names);
+			WriteUnsignedIntegral(out, obj.block_names.size());
 			WriteUnsignedIntegral(out, obj.max_name_length);
 			for(const auto& itr : obj.block_names)
 			{
@@ -258,7 +256,7 @@ namespace NIF
 			}
 		}
 
-		if(obj.version >= NIFVersion::V5_0_0_6)
+		if(obj.version >= Version(5,0,0,6))
 		{
 			WriteUnsignedIntegral(out, obj.num_groups);
 		}
@@ -266,7 +264,7 @@ namespace NIF
 		return out;
 	}
 
-	string Header::str()
+	string Header::ToString()
 	{
 		stringstream ss;
 		uint32_t idx = 0;
@@ -284,7 +282,7 @@ namespace NIF
 		ss << setw(width) << "Version: " << hex << version << dec << endl;
 		ss << setw(width) << "Endian Type: " << endian << endl;
 		ss << setw(width) << "User Version 1: " << user_version_1 << endl;
-		ss << setw(width) << "Number of blocks: " << num_blocks << endl;
+		ss << setw(width) << "Number of blocks: " << block_type_index.size() << endl;
 		if(user_version_1 >= 10 ||
 				((user_version_1 == 1) && version != NIFVersion::V10_2_0_0))
 		{
@@ -294,24 +292,24 @@ namespace NIF
 		{
 			ss << setw(width) << "Image Preview Size: " << image_preview_size << endl;
 		}
-		ss << export_info.str();
-		ss << setw(width) << "Number of Block Types: " << num_block_type << endl;
-		for(uint32_t i = 0; i < num_block_type; ++i)
+		ss << export_info.ToString();
+		ss << setw(width) << "Number of Block Types: " << block_type_names.size() << endl;
+		for(uint32_t i = 0; i < block_type_names.size(); ++i)
 		{
 			ss	<< setw(width) << "Block Type Name[" + to_string(i) + "]: "
 				<< block_type_names[i] << endl;
 		}
-		for(uint32_t i = 0; i < num_blocks; ++i)
+		for(uint32_t i = 0; i < block_type_index.size(); ++i)
 		{
 			ss	<< setw(width) << "Block Index[" + to_string(i) + "]: "
-				<< block_type_names[block_index[i]] << endl;
+				<< block_type_names[block_type_index[i]] << endl;
 		}
-		for(uint32_t i = 0; i < num_blocks; ++i)
+		for(uint32_t i = 0; i < block_type_index.size(); ++i)
 		{
 			ss	<< setw(width) << "Block Size[" + to_string(i) + "]: "
-				<< block_size[i] << endl;
+				<< block_sizes[i] << " bytes" << endl;
 		}
-		ss << setw(width) << "Number of Block Names: " << num_block_names << endl;
+		ss << setw(width) << "Number of Block Names: " << block_names.size() << endl;
 		ss << setw(width) << "Max Block Name Length: " << max_name_length << endl;
 		for(const auto& itr : block_names)
 		{

@@ -44,7 +44,7 @@ namespace NIF
 
 	void WriteByteString(ostream& out, const string& line)
 	{
-		uint8_t length = strlen(line.data());
+		uint8_t length = line.length();
 
 		out.write(reinterpret_cast<char*>(&length), sizeof(length));
 		out.write(line.data(), length);
@@ -52,7 +52,7 @@ namespace NIF
 
 	void WriteIntString(ostream& out, const string& line)
 	{
-		uint32_t length = strlen(line.data());
+		uint32_t length = line.length();
 
 		out.write(reinterpret_cast<char*>(&length), sizeof(length));
 		out.write(line.data(), length);
@@ -110,7 +110,7 @@ namespace NIF
 									byte_version[1], byte_version[0] };
 		string version_string = to_string(version_arr[0]) + "." + to_string(version_arr[1]);
 
-		if(version >= NIFVersion::V3_3_0_13)
+		if(version >= Version(3,3,0,13))
 		{
 			version_string	+= "." + to_string(version_arr[2]) + "." + to_string(version_arr[3]);
 		}

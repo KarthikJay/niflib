@@ -3,7 +3,7 @@
 #include <string>
 
 #include <NIF/api.hpp>
-#include <NIF/blocks/header.hpp>
+#include <NIF/header.hpp>
 
 using namespace std;
 using namespace NIF;
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	}
 
 	Header header = ReadHeaderInfo(argv[1]);
-	cout << header.str();
+	cout << header.ToString();
 
 	return EXIT_SUCCESS;
 }

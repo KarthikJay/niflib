@@ -5,12 +5,19 @@
 #include <utility>
 #include <type_traits>
 
+#include <NIF/export_visibility.hpp>
+
 namespace NIF
 {
 	template<typename E>
 	constexpr auto ToIntegral(E e) -> typename std::underlying_type<E>::type
 	{
 		return static_cast<typename std::underlying_type<E>::type>(e);
+	}
+
+	constexpr uint32_t Version(uint8_t major, uint8_t minor, uint8_t patch, uint8_t internal)
+	{
+		return (major << 24) | (minor << 16) | (patch << 8) | internal;
 	}
 
 	enum class KFGame : uint32_t
@@ -30,27 +37,23 @@ namespace NIF
 		EXPORT_KF_MULTI			//! Output multiple KF
 	};
 
-	enum class NIFVersion : uint32_t
+	//! List of supported NIF's by this library
+	enum class NIF_API NIFVersion : uint32_t
 	{
-		V2_3		= 0x02030000,	//! NIF Version 2.3
-		V3_0		= 0x03000000,	//! NIF Version 3.0
-		V3_03		= 0x03000300,	//! NIF Version 3.03
-		V3_1		= 0x03010000,	//! NIF Version 3.1
-		V3_3_0_13	= 0x0303000D,	//! NIF Version 3.3.0.13
-		V4_0_0_0	= 0x04000000,	//! NIF Version 4.0.0.0
-		V4_0_0_2	= 0x04000002,	//! NIF Version 4.0.0.2
-		V4_1_0_12	= 0x0401000C,	//! NIF Version 4.1.0.12
-		V4_2_0_2	= 0x04020002,	//! NIF Version 4.2.0.2
-		V4_2_1_0	= 0x04020100,	//! NIF Version 4.2.1.0
-		V4_2_2_0	= 0x04020200,	//! NIF Version 4.2.2.0
-		V5_0_0_6	= 0x05000006,	//! NIF Version 5.0.0.6
-		V10_0_1_0	= 0x0A000100,	//! NIF Version 10.0.1.0
-		V10_0_1_2	= 0x0A000102,	//! NIF Version 10.0.1.2
-		V10_0_1_3	= 0x0A000103,	//! NIF Version 10.0.1.3
-		V10_1_0_0	= 0x0A010000,	//! NIF Version 10.1.0.0
-		V10_1_0_101	= 0x0A010065,	//! NIF Version 10.1.0.101
-		V10_1_0_106	= 0x0A01006A,	//! NIF Version 10.1.0.106
-		V10_2_0_0	= 0x0A020000,	//! NIF Version 10.2.0.0
+		V2_3		= 0x02030000,	//! Dark Age of Camelot
+		V3_0		= 0x03000000,	//! Star Trek: Bridge Commander
+		V3_03		= 0x03000300,	//! Dark Age of Camelot
+		V3_1		= 0x03010000,	//! Dark Age of Camelot, Star Trek: Bridge Commander
+		V4_0_0_0	= 0x04000000,	//! Freedom Force
+		V4_0_0_2	= 0x04000002,	//! Morrowind, Freedom Force
+		V4_1_0_12	= 0x0401000C,	//! Dark Age of Camelot
+		V4_2_0_2	= 0x04020002,	//! Civilization IV
+		V4_2_1_0	= 0x04020100,	//! Dark Age of Camelot, Civilization IV
+		V4_2_2_0	= 0x04020200,	//! Dark Age of Camelot, Civilization IV, Empire Earth II, Culpa Innata
+		V10_0_1_0	= 0x0A000100,	//! Zoo Tycoon 2, Civilization IV, Oblivion
+		V10_0_1_2	= 0x0A000102,	//! Oblivion
+		V10_1_0_0	= 0x0A010000,	//! Dark Age of Camelot, Civilization IV, Freedom Force vs. the 3rd Reich, Axis and Allies, Kohan 2, Entropia Universe, Wildlife Park 2, The Guild 2, NeoSteam, Empire Earth II
+		V10_2_0_0	= 0x0A020000,	//! Civilization IV, Oblivion, Loki, Pro Cycling Manager, Prison Tycoon, Red Ocean, Wildlife Park 2
 		V10_4_0_1	= 0x0A040001,	//! NIF Version 10.4.0.1
 		V20_0_0_4	= 0x14000004,	//! NIF Version 20.0.0.4
 		V20_0_0_5	= 0x14000005,	//! NIF Version 20.0.0.5
@@ -63,8 +66,7 @@ namespace NIF
 		V20_3_0_6	= 0x14030006,	//! NIF Version 20.3.0.6
 		V20_3_0_9	= 0x14030009,	//! NIF Version 20.3.0.9
 		V30_0_0_2	= 0x1E000002,	//! NIF Version 30.0.0.2
-		V30_1_0_3	= 0x1E010003,	//! NIF Version 30.1.0.3
-		UNSUPPORTED	= 0xFFFFFFFF	//! Unsupported NIF Version
+		V30_1_0_3	= 0x1E010003	//! Rocksmith 2014
 	};
 
 	enum class EndianType : uint8_t
@@ -96,7 +98,6 @@ namespace NIF
 		LOD_LANDSCAPE_NOISE					= 18,	//! Enables Level of Detail noise for landscapes
 		MULTI_TEXTURE_LANDSCAPE_LOD_BLEND	= 19,	//! Enables multi-texture Level of Detail blending for landscapes
 		DISMEMBERMENT						= 20,	//! Enables Dismemberment
-		COUNT								= 21	//! Enables Count
 	};
 
 	inline bool operator== (const EndianType lhs, const EndianType rhs)

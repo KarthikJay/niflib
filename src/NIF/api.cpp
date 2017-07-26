@@ -4,7 +4,7 @@
 #include <utility>
 
 #include <NIF/api.hpp>
-#include <NIF/blocks/header.hpp>
+#include <NIF/header.hpp>
 #include <NIF/enums.hpp>
 #include <NIF/utility.hpp>
 
@@ -45,7 +45,7 @@ namespace NIF
 		ifstream input(file_name, ifstream::binary);
 
 		input >> header;
-		nif_objects.resize(header.num_blocks);
+		nif_objects.resize(header.block_type_index.size());
 
 		return nif_objects;
 	}

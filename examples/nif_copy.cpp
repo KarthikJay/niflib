@@ -3,7 +3,7 @@
 #include <string>
 
 #include <NIF/api.hpp>
-#include <NIF/blocks/header.hpp>
+#include <NIF/header.hpp>
 
 using namespace std;
 using namespace NIF;

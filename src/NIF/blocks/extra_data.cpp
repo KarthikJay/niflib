@@ -4,23 +4,35 @@ using namespace std;
 
 namespace NIF
 {
-	ExtraData::ExtraData(std::shared_ptr<Header> header, uint32_t block_id)
-	: Object(header, block_id) {}
-
-	string ExtraData::str() const
+	string ExtraData::ToString() const
 	{
-		return "Block #: " + block_index;
+		return "BSExtraData Block";
 	}
 
-	ostream& ExtraData::write(ostream& out) const
+	string ExtraData::GetBlockTypeName() const
+	{
+		return "BSExtraData";
+	}
+
+	uint32_t ExtraData::GetSizeInBytes() const
+	{
+		return 0;
+	}
+
+	ExtraData* ExtraData::Clone() const
+	{
+		return new ExtraData(*this);
+	}
+
+	ostream& ExtraData::WriteBinary(ostream& out) const
 	{
 		return out;
 	}
 
-	istream& ExtraData::read(istream& in)
+	istream& ExtraData::ReadBinary(istream& in)
 	{
 		return in;
 	}
 
-	ObjectFactoryRegister<ExtraData> ExtraData::registrar("ExtraData");
+	BlockFactoryRegistrar<ExtraData> ExtraData::registrar("BSExtraData");
 }

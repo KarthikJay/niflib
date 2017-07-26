@@ -5,33 +5,49 @@ using namespace std;
 
 namespace NIF
 {
-	NamedExtraData::NamedExtraData(std::shared_ptr<Header> header, uint32_t block_id)
-	: Object(header, block_id), ExtraData(header, block_id) {}
+	NamedExtraData::NamedExtraData(File& owner) : Block(owner), ExtraData(owner) {}
 
-	string NamedExtraData::str() const
+	string NamedExtraData::ToString() const
 	{
-		return "Block #: " + block_index;
+		return "NiExtraData Block";
 	}
 
-	ostream& NamedExtraData::write(ostream& out) const
+	string NamedExtraData::GetBlockTypeName() const
 	{
-		if(header->version >= NIFVersion::V10_1_0_0)
+		return "NiExtraData";
+	}
+
+	uint32_t NamedExtraData::GetSizeInBytes() const
+	{
+		return ExtraData::GetSizeInBytes() + NamedBlock::GetSizeInBytes();
+	}
+
+	NamedExtraData* NamedExtraData::Clone() const
+	{
+		return new NamedExtraData(*this);
+	}
+
+	ostream& NamedExtraData::WriteBinary(ostream& out) const
+	{
+		auto current_version = owner.GetHeader().version;
+		if(current_version >= NIFVersion::V10_1_0_0)
 		{
-			BlockName::write(out);
+			NamedBlock::WriteBinary(out);
 		}
 
 		return out;
 	}
 
-	istream& NamedExtraData::read(istream& in)
+	istream& NamedExtraData::ReadBinary(istream& in)
 	{
-		if(header->version >= NIFVersion::V10_1_0_0)
+		auto current_version = owner.GetHeader().version;
+		if(current_version >= NIFVersion::V10_1_0_0)
 		{
-			BlockName::read(in);
+			NamedBlock::ReadBinary(in);
 		}
 
 		return in;
 	}
 
-	ObjectFactoryRegister<NamedExtraData> NamedExtraData::registrar("NiExtraData");
+	BlockFactoryRegistrar<NamedExtraData> NamedExtraData::registrar("NiExtraData");
 }

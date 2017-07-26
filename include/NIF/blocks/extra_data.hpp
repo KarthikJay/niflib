@@ -4,22 +4,27 @@
 #include <string>
 #include <memory>
 
-#include <NIF/interfaces/object.hpp>
+#include <NIF/interfaces/block.hpp>
 #include <NIF/export_visibility.hpp>
-#include <NIF/object_factory.hpp>
+#include <NIF/block_factory.hpp>
 
 namespace NIF
 {
-	//! Unnamed ExtraData block
-	class NIF_API ExtraData : public virtual Object
+	//! ExtraData block
+	class NIF_API ExtraData : public virtual Block
 	{
 	public:
-		ExtraData(std::shared_ptr<Header> header, uint32_t block_id);
-		std::string str() const;
+		ExtraData(File& file) : Block(file) {}
+		virtual ~ExtraData() {}
+
+		std::string ToString() const;
+		std::string GetBlockTypeName() const;
+		uint32_t GetSizeInBytes() const;
+		ExtraData* Clone() const;
 	protected:
-		std::ostream& write(std::ostream& out) const;
-		std::istream& read(std::istream& in);
+		std::ostream& WriteBinary(std::ostream& out) const;
+		std::istream& ReadBinary(std::istream& in);
 	private:
-		static ObjectFactoryRegister<ExtraData> registrar;
+		static BlockFactoryRegistrar<ExtraData> registrar;
 	};
 }
