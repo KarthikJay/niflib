@@ -41,17 +41,22 @@ namespace NIF
 	string ExtraBlock::ToString() const
 	{
 		stringstream ss;
-		uint32_t width = 25;
+		uint32_t width = 26;
 		uint32_t count = 0;
 
-		ss << setw(width) << "Extra Data Block Indices:" << endl;
+		ss << setw(width) << "Extra Data Block Indices: " << endl;
 		for (auto& itr : extra_block_index)
 		{
-			ss << setw(width) << "[" + to_string(count++) + "]:";
+			ss << setw(width) << "[" + to_string(count++) + "]: ";
 			ss << itr << endl;
 		}
 
 		return ss.str();
+	}
+
+	uint32_t ExtraBlock::GetSizeInBytes() const
+	{
+		return sizeof(uint32_t) * extra_block_index.size();
 	}
 
 	ostream& ExtraBlock::WriteBinary(ostream& out) const

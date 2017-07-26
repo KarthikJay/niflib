@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <NIF/interfaces/block.hpp>
 #include <NIF/export_visibility.hpp>
 
@@ -9,6 +11,9 @@ namespace NIF
 	{
 	public:
 		GetControllerBlock();
+
+		std::string ToString() const;
+		uint32_t GetSizeInBytes() const;
 	protected:
 		uint32_t controller_index;
 

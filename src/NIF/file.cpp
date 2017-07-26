@@ -29,9 +29,11 @@ namespace NIF
 		auto name_found = find(	header.block_type_names.begin(),
 								header.block_type_names.end(),
 								new_block.GetBlockTypeName());
+
 		if(name_found != header.block_type_names.end())
 		{
 			header.block_type_names.push_back(new_block.GetBlockTypeName());
 		}
+		header.block_sizes.push_back(new_block.GetSizeInBytes());
 	}
 }

@@ -129,11 +129,12 @@ namespace NIF
 			in >> obj.export_info;
 		}
 
+		cout << "GOT HERE!" << endl;
+
 		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
 			in.read(reinterpret_cast<char*>(&vec_size), sizeof(uint16_t));
 			obj.block_type_names.resize(vec_size);
-			cout << "Size of block_type_names: " << obj.block_type_names.size() << endl;
 			for(auto& itr : obj.block_type_names)
 			{
 				itr = ReadIntString(in);
@@ -163,19 +164,18 @@ namespace NIF
 			}
 		}
 
+		cout << "GOT HERE 2!" << endl;
+
 		if(obj.version >= Version(5,0,0,6))
 		{
 			in.read(reinterpret_cast<char*>(&obj.num_groups), sizeof(obj.num_groups));
 		}
-
-		cout << "GOT HERE FINAL!" << endl;
 
 		return in;
 	}
 
 	ostream& operator<<(ostream& out, const Header& obj)
 	{
-
 		WriteLine(out, obj.header_line);
 
 		if(obj.version <= NIFVersion::V3_1)
@@ -203,7 +203,7 @@ namespace NIF
 
 		if(obj.version >= Version(3,3,0,13))
 		{
-			WriteUnsignedIntegral(out, obj.block_type_index.size());
+			WriteUnsignedIntegral(out, static_cast<uint32_t>(obj.block_type_index.size()));
 		}
 
 		if(obj.version >= NIFVersion::V10_1_0_0)
@@ -227,7 +227,7 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
-			WriteUnsignedIntegral(out, obj.block_type_names.size());
+			WriteUnsignedIntegral(out, static_cast<uint16_t>(obj.block_type_names.size()));
 			for(const auto& itr : obj.block_type_names)
 			{
 				WriteIntString(out, itr);
@@ -248,7 +248,7 @@ namespace NIF
 
 		if(obj.version >= NIFVersion::V20_1_0_3)
 		{
-			WriteUnsignedIntegral(out, obj.block_names.size());
+			WriteUnsignedIntegral(out, static_cast<uint32_t>(obj.block_names.size()));
 			WriteUnsignedIntegral(out, obj.max_name_length);
 			for(const auto& itr : obj.block_names)
 			{

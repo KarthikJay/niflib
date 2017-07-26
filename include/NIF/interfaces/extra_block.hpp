@@ -22,6 +22,7 @@ namespace NIF
 		void RemoveAllExtraData()
 		*/
 		std::string ToString() const;
+		uint32_t GetSizeInBytes() const;
 	protected:
 		std::ostream& WriteBinary(std::ostream& out) const;
 		std::istream& ReadBinary(std::istream& in);

@@ -1,5 +1,3 @@
-#include <cstring>
-
 #include <NIF/utility.hpp>
 
 using namespace std;
@@ -38,7 +36,7 @@ namespace NIF
 	//! ---NIF write utility function implementations---
 	void WriteLine(ostream& out, const string& line)
 	{
-		out.write(line.data(), sizeof(line.data() - 1));
+		out.write(line.data(), line.length());
 		out.put('\n');
 	}
 
