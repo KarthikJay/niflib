@@ -129,8 +129,6 @@ namespace NIF
 			in >> obj.export_info;
 		}
 
-		cout << "GOT HERE!" << endl;
-
 		if(obj.version >= NIFVersion::V10_1_0_0)
 		{
 			in.read(reinterpret_cast<char*>(&vec_size), sizeof(uint16_t));
@@ -163,8 +161,6 @@ namespace NIF
 				itr = ReadIntString(in);
 			}
 		}
-
-		cout << "GOT HERE 2!" << endl;
 
 		if(obj.version >= Version(5,0,0,6))
 		{

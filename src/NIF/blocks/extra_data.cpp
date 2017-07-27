@@ -1,3 +1,6 @@
+#include <sstream>
+#include <iostream>
+
 #include <NIF/blocks/extra_data.hpp>
 
 using namespace std;
@@ -6,7 +9,11 @@ namespace NIF
 {
 	string ExtraData::ToString() const
 	{
-		return "BSExtraData Block";
+		stringstream ss;
+		uint32_t width = 19;
+		ss << setw(width) << "[BSExtraData Block]" << endl;
+
+		return ss.str();
 	}
 
 	string ExtraData::GetBlockTypeName() const
