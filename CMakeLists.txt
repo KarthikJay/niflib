@@ -49,11 +49,12 @@ endif()
 
 # OS & compiler specific options
 if(WIN32)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall /Zi")
 	set(CMAKE_CXX_FLAGS_RELEASE "/Ox")
 	set(CMAKE_CXX_FLAGS_RELEASE "/Zi")
 else(UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameters -ffast-math")
 	set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 	set(CMAKE_CXX_FLAGS_DEBUG "-g")
 endif()

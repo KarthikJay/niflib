@@ -10,7 +10,7 @@ namespace NIF
 	class NIF_API ControllableBlock : public virtual Block
 	{
 	public:
-		GetControllerBlock();
+		// GetControllerBlock();
 
 		std::string ToString() const;
 		uint32_t GetSizeInBytes() const;
@@ -19,5 +19,5 @@ namespace NIF
 
 		std::ostream& WriteBinary(std::ostream& out) const;
 		std::istream& ReadBinary(std::istream& in);
-	}
+	};
 }

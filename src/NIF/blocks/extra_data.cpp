@@ -1,5 +1,6 @@
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 #include <NIF/blocks/extra_data.hpp>
 
