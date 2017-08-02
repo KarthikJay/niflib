@@ -5,6 +5,7 @@
 #include <NIF/interfaces/named_block.hpp>
 #include <NIF/enums.hpp>
 #include <NIF/utility.hpp>
+#include <NIF/file.hpp>
 
 using namespace std;
 

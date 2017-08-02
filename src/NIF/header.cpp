@@ -8,16 +8,6 @@ using namespace std;
 
 namespace NIF
 {
-
-	ExportInfo::ExportInfo()
-	{
-		for(auto itr : info)
-		{
-			itr = "";
-		}
-		use_extra = false;
-	}
-
 	istream& operator>>(istream& in, ExportInfo& obj)
 	{
 		uint32_t num_info = obj.use_extra ? obj.info.max_size() : obj.kOldInfoSize;
@@ -57,14 +47,6 @@ namespace NIF
 		}
 
 		return ss.str();
-	}
-
-	Header::Header()
-	{
-		header_line.reserve(45);
-		this->version = ToIntegral(NIFVersion::V4_0_0_2);
-		this->user_version_1 = 0;
-		endian = EndianType::ENDIAN_LITTLE;
 	}
 
 	istream& operator>> (istream& in, Header& obj)
@@ -317,10 +299,5 @@ namespace NIF
 		}
 
 		return ss.str();
-	}
-
-	uint32_t Header::GetVersion()
-	{
-		return version;
 	}
 }

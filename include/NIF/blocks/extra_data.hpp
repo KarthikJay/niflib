@@ -14,16 +14,20 @@ namespace NIF
 	class NIF_API ExtraData : public virtual Block
 	{
 	public:
-		ExtraData(File& file) : Block(file) {}
 		virtual ~ExtraData() {}
 
-		std::string ToString() const;
-		std::string GetBlockTypeName() const;
-		uint32_t GetSizeInBytes() const;
-		ExtraData* Clone() const;
+		std::string ToString() const override;
+		std::string GetBlockTypeName() const override;
+		uint32_t GetSizeInBytes() const override;
+
+		friend BlockFactoryRegistrar<ExtraData>;
 	protected:
-		std::ostream& WriteBinary(std::ostream& out) const;
-		std::istream& ReadBinary(std::istream& in);
+		ExtraData(File& file) : Block(file) {}
+		ExtraData(const ExtraData& copy) = delete;
+		ExtraData& operator=(const ExtraData& copy) { return *this; }
+
+		std::ostream& WriteBinary(std::ostream& out) const override;
+		std::istream& ReadBinary(std::istream& in) override;
 	private:
 		static BlockFactoryRegistrar<ExtraData> registrar;
 	};

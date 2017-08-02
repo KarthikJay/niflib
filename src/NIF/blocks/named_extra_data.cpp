@@ -1,12 +1,11 @@
 #include <NIF/blocks/named_extra_data.hpp>
 #include <NIF/enums.hpp>
+#include <NIF/file.hpp>
 
 using namespace std;
 
 namespace NIF
 {
-	NamedExtraData::NamedExtraData(File& owner) : Block(owner), ExtraData(owner) {}
-
 	string NamedExtraData::ToString() const
 	{
 		return "NiExtraData Block";
@@ -20,11 +19,6 @@ namespace NIF
 	uint32_t NamedExtraData::GetSizeInBytes() const
 	{
 		return ExtraData::GetSizeInBytes() + NamedBlock::GetSizeInBytes();
-	}
-
-	NamedExtraData* NamedExtraData::Clone() const
-	{
-		return new NamedExtraData(*this);
 	}
 
 	ostream& NamedExtraData::WriteBinary(ostream& out) const

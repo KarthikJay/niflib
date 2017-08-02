@@ -12,7 +12,6 @@ namespace NIF
 	class NIF_API ExtraBlock : public virtual Block
 	{
 	public:
-		uint32_t AddExtraData(const ExtraData& block);
 		void LinkExtraData(uint32_t block_index);
 		void UnlinkExtraData(uint32_t block_index);
 		void UnlinkAllExtraData();

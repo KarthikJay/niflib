@@ -4,20 +4,12 @@
 
 #include <NIF/interfaces/extra_block.hpp>
 #include <NIF/utility.hpp>
+#include <NIF/file.hpp>
 
 using namespace std;
 
 namespace NIF
 {
-	uint32_t ExtraBlock::AddExtraData(const ExtraData& block)
-	{
-		uint32_t block_index = owner.AddBlock(block);
-
-		extra_block_index.push_back(block_index);
-
-		return block_index;
-	}
-
 	void ExtraBlock::LinkExtraData(uint32_t block_index)
 	{
 		extra_block_index.push_back(block_index);

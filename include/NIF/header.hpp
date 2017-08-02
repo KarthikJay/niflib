@@ -11,7 +11,11 @@
 
 namespace NIF
 {
+	class Header;
+	class File;
+
 	//! Information about how the NIF was exported, part of the NIF header block.
+	//! Note: This class can only be created by #Header
 	class NIF_API ExportInfo
 	{
 	public:
@@ -22,9 +26,12 @@ namespace NIF
 		//! Declares if additional information strings are used
 		bool use_extra;
 
-		ExportInfo();
 		//! Output export information as string
 		std::string ToString();
+
+		friend Header;
+	protected:
+		ExportInfo() : use_extra(false) {}
 	private:
 		const uint32_t kOldInfoSize = 2;
 		//! Write export information to NIF binary
@@ -34,7 +41,9 @@ namespace NIF
 	};
 
 
+	//! This class contains the layout of the rest of the NIF
 	//! \note NIF header is always in little endian.
+	//! \note This class can only be created by class #File
 	class NIF_API Header
 	{
 	public:
@@ -70,13 +79,17 @@ namespace NIF
 		//! Number of groups
 		uint32_t num_groups;
 
-		Header();
-		//! Get the NIF version
-		//! \return The NIF version in 32-bit hexadecimal notation
-		uint32_t GetVersion();
 		//! Output NIFHeader as string
 		std::string ToString();
+
+		friend File;
+	protected:
+		Header() : version(0x14020007), endian(EndianType::ENDIAN_LITTLE)
+		{
+			header_line.reserve(kMaxHeaderLineSize);
+		}
 	private:
+		const uint32_t kMaxHeaderLineSize = 45;
 		//! Write NIFHeader to NIF binary
 		NIF_API friend std::ostream& operator<<(std::ostream& out, const Header& obj);
 		//! Read NIFHeader from NIF binary

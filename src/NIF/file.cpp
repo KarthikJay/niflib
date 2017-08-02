@@ -17,13 +17,6 @@ namespace NIF
 		return header;
 	}
 
-	uint32_t File::AddBlock(const Block& new_block)
-	{
-		blocks.emplace_back(new_block.Clone());
-		
-		return blocks.size() - 1;
-	}
-
 	void File::UpdateHeader(const Block& new_block)
 	{
 		auto name_found = find(	header.block_type_names.begin(),

@@ -27,11 +27,6 @@ namespace NIF
 		return 0;
 	}
 
-	ExtraData* ExtraData::Clone() const
-	{
-		return new ExtraData(*this);
-	}
-
 	ostream& ExtraData::WriteBinary(ostream& out) const
 	{
 		return out;

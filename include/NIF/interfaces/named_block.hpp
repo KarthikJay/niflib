@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include <NIF/interfaces/block.hpp>
 #include <NIF/export_visibility.hpp>
 
