@@ -1,18 +1,18 @@
 #include <sstream>
-#include <iostream>
 #include <iomanip>
 
-#include <NIF/blocks/extra_data.hpp>
+#include <NIF/blocks/extradata.hpp>
 
 using namespace std;
 
 namespace NIF
 {
+	const uint32_t kFormatWidth = 19;
+
 	string ExtraData::ToString() const
 	{
 		stringstream ss;
-		uint32_t width = 19;
-		ss << setw(width) << "[BSExtraData Block]" << endl;
+		ss << setw(kFormatWidth) << "[BSExtraData Block]" << endl;
 
 		return ss.str();
 	}

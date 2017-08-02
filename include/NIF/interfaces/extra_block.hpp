@@ -3,11 +3,12 @@
 #include <vector>
 
 #include <NIF/interfaces/block.hpp>
-#include <NIF/blocks/extra_data.hpp>
 #include <NIF/export_visibility.hpp>
 
 namespace NIF
 {
+	class ExtraData;
+
 	//! Interface for objects that can hold ExtraData blocks
 	class NIF_API ExtraBlock : public virtual Block
 	{
@@ -15,16 +16,17 @@ namespace NIF
 		void LinkExtraData(uint32_t block_index);
 		void UnlinkExtraData(uint32_t block_index);
 		void UnlinkAllExtraData();
+		ExtraData& GetExtraData(uint32_t num_data);
 		/*
 		const std::vector<uint32_t>& GetExtraDataIndexList() const;
 		void RemoveExtraData(uint32_t block_index)
 		void RemoveAllExtraData()
 		*/
-		std::string ToString() const;
-		uint32_t GetSizeInBytes() const;
+		std::string ToString() const override;
+		uint32_t GetSizeInBytes() const override;
 	protected:
-		std::ostream& WriteBinary(std::ostream& out) const;
-		std::istream& ReadBinary(std::istream& in);
+		std::ostream& WriteBinary(std::ostream& out) const override;
+		std::istream& ReadBinary(std::istream& in) override;
 	private:
 		//! List of all ExtraData type block indices owned by this block.
 		std::vector<uint32_t> extra_block_index;

@@ -1,4 +1,7 @@
-#include <NIF/blocks/named_extra_data.hpp>
+#include <sstream>
+#include <iomanip>
+
+#include <NIF/blocks/niextradata.hpp>
 #include <NIF/enums.hpp>
 #include <NIF/file.hpp>
 
@@ -6,9 +9,14 @@ using namespace std;
 
 namespace NIF
 {
+	const uint32_t kFormatWidth = 19;
+
 	string NamedExtraData::ToString() const
 	{
-		return "NiExtraData Block";
+		stringstream ss;
+		ss << setw(kFormatWidth) << "[NiExtraData Block]" << endl;
+
+		return ss.str();
 	}
 
 	string NamedExtraData::GetBlockTypeName() const

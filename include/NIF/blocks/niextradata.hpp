@@ -1,11 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <memory>
-
 #include <NIF/interfaces/named_block.hpp>
-#include <NIF/blocks/extra_data.hpp>
+#include <NIF/blocks/extradata.hpp>
 
 namespace NIF
 {
