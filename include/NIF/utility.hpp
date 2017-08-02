@@ -49,7 +49,7 @@ namespace NIF
 		out.write(reinterpret_cast<char*>(&val), static_cast<std::streamsize>(sizeof(val)));
 	}
 
-	uint32_t ValidNIF(const std::string &header_line);
+	uint32_t ValidateNIF(const std::string &header_line);
 	uint32_t ParseVersionString(const std::string& version_string);
 	std::string FormatVersionString(uint32_t version);
 	std::string GetNifHeaderLine(NIFVersion version);

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include <NIF/interfaces/block.hpp>
 #include <NIF/export_visibility.hpp>
 
@@ -12,11 +10,12 @@ namespace NIF
 	public:
 		std::string GetBlockName() const;
 		void SetBlockName(const std::string&);
-		std::string ToString() const;
-		uint32_t GetSizeInBytes() const;
+
+		std::string ToString() const override;
+		uint32_t GetSizeInBytes() const override;
 	protected:
-		std::ostream& WriteBinary(std::ostream& out) const;
-		std::istream& ReadBinary(std::istream& in);
+		void WriteBinary(std::ostream& out) const override;
+		void ReadBinary(std::istream& in) override;
 	private:
 		//! Index into #Header::block_names containing the name for this block.
 		uint32_t name_index;

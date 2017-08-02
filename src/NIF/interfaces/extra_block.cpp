@@ -4,20 +4,12 @@
 
 #include <NIF/interfaces/extra_block.hpp>
 #include <NIF/utility.hpp>
+#include <NIF/file.hpp>
 
 using namespace std;
 
 namespace NIF
 {
-	uint32_t ExtraBlock::AddExtraData(const ExtraData& block)
-	{
-		uint32_t block_index = owner.AddBlock(block);
-
-		extra_block_index.push_back(block_index);
-
-		return block_index;
-	}
-
 	void ExtraBlock::LinkExtraData(uint32_t block_index)
 	{
 		extra_block_index.push_back(block_index);
@@ -59,18 +51,16 @@ namespace NIF
 		return sizeof(uint32_t) * extra_block_index.size();
 	}
 
-	ostream& ExtraBlock::WriteBinary(ostream& out) const
+	void ExtraBlock::WriteBinary(ostream& out) const
 	{
 		WriteUnsignedIntegral(out, extra_block_index.size());
 		for(const auto& itr : extra_block_index)
 		{
 			WriteUnsignedIntegral(out, itr);
 		}
-
-		return out;
 	}
 
-	std::istream& ExtraBlock::ReadBinary(std::istream& in)
+	void ExtraBlock::ReadBinary(istream& in)
 	{
 		uint32_t list_size;
 
@@ -80,7 +70,20 @@ namespace NIF
 		{
 			in.read(reinterpret_cast<char*>(&itr), sizeof(itr));
 		}
+	}
 
-		return in;
+	void ExtraBlock::RemoveBlockLink(uint32_t block_index)
+	{
+		for(auto itr = extra_block_index.begin(); itr != extra_block_index.end(); ++itr)
+		{
+			if(*itr == block_index)
+			{
+				extra_block_index.erase(itr);
+			}
+			else if(*itr > block_index)
+			{
+				--(*itr);
+			}
+		}
 	}
 }

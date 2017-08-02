@@ -5,6 +5,7 @@
 #include <NIF/interfaces/named_block.hpp>
 #include <NIF/enums.hpp>
 #include <NIF/utility.hpp>
+#include <NIF/file.hpp>
 
 using namespace std;
 
@@ -13,8 +14,8 @@ namespace NIF
 	string NamedBlock::GetBlockName() const
 	{
 		string name;
-		bool use_old = owner.GetHeader().version < NIFVersion::V20_1_0_3;
-		name = use_old ? block_name : owner.GetHeader().block_names[name_index];
+		bool use_old = owner.GetVersion() < NIFVersion::V20_1_0_3;
+		name = use_old ? block_name : GetBlockNames()[name_index];
 
 		return name;
 	}
@@ -51,15 +52,15 @@ namespace NIF
 
 	uint32_t NamedBlock::GetSizeInBytes() const
 	{
-		bool use_old = owner.GetHeader().version < NIFVersion::V20_1_0_3;
+		bool use_old = owner.GetVersion() < NIFVersion::V20_1_0_3;
 		uint32_t num_size = use_old ? block_name.length() : sizeof(name_index);
 
 		return num_size;
 	}
 
-	ostream& NamedBlock::WriteBinary(ostream& out) const
+	void NamedBlock::WriteBinary(ostream& out) const
 	{
-		bool use_old = owner.GetHeader().version < NIFVersion::V20_1_0_3;
+		bool use_old = owner.GetVersion() < NIFVersion::V20_1_0_3;
 
 		if(use_old)
 		{
@@ -73,9 +74,9 @@ namespace NIF
 		return out;
 	}
 
-	istream& NamedBlock::ReadBinary(istream& in)
+	void NamedBlock::ReadBinary(istream& in)
 	{
-		bool use_old = owner.GetHeader().version < NIFVersion::V20_1_0_3;
+		bool use_old = owner.GetVersion() < NIFVersion::V20_1_0_3;
 
 		if(use_old)
 		{

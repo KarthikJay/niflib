@@ -1,17 +1,18 @@
-#include <sstream>
-#include <iostream>
+#include <iomanip>
 
-#include <NIF/blocks/extra_data.hpp>
+#include <NIF/blocks/extradata.hpp>
 
 using namespace std;
 
 namespace NIF
 {
+	const uint32_t kFormatWidth = 19;
+
 	string ExtraData::ToString() const
 	{
 		stringstream ss;
-		uint32_t width = 19;
-		ss << setw(width) << "[BSExtraData Block]" << endl;
+
+		ss << setw(kFormatWidth) << "[BSExtraData Block]" << endl;
 
 		return ss.str();
 	}
@@ -26,19 +27,19 @@ namespace NIF
 		return 0;
 	}
 
-	ExtraData* ExtraData::Clone() const
+	void ExtraData::WriteBinary(ostream& out) const
 	{
-		return new ExtraData(*this);
+
 	}
 
-	ostream& ExtraData::WriteBinary(ostream& out) const
+	void ExtraData::ReadBinary(istream& in)
 	{
-		return out;
+
 	}
 
-	istream& ExtraData::ReadBinary(istream& in)
+	void ExtraData::RemoveBlockLink(uint32_t block_index)
 	{
-		return in;
+
 	}
 
 	BlockFactoryRegistrar<ExtraData> ExtraData::registrar("BSExtraData");

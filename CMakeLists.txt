@@ -18,9 +18,9 @@ file(GLOB_RECURSE LIB_HEADERS "src/*.hpp")
 
 # Project options
 option(BUILD_SHARED_LIBS		"Build a shared library."	ON)
-option(BUILD_TESTS				"Build tests."				ON)
+option(BUILD_TESTS				"Build tests."				OFF)
 #option(BUILD_DOCS				"Build documentation."		OFF)
-option(BUILD_EXAMPLES			"Build examples."			ON)
+option(BUILD_EXAMPLES			"Build examples."			OFF)
 
 # Project properties
 set(CMAKE_CXX_STANDARD			17)
@@ -49,11 +49,11 @@ endif()
 
 # OS & compiler specific options
 if(WIN32)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall /Yd")
 	set(CMAKE_CXX_FLAGS_RELEASE "/Ox")
 	set(CMAKE_CXX_FLAGS_RELEASE "/Zi")
 else(UNIX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Wno-unused-parameter")
 	set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 	set(CMAKE_CXX_FLAGS_DEBUG "-g")
 endif()

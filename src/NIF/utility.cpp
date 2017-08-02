@@ -57,7 +57,7 @@ namespace NIF
 	}
 
 	//! --- NIF general utility function implementations---
-	uint32_t ValidNIF(const string& header_line)
+	uint32_t ValidateNIF(const string& header_line)
 	{
 		uint32_t ver_str_offset = 0;
 		string_view check(header_line.data(), kMaxHeaderStringLength);
