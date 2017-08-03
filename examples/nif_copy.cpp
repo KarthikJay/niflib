@@ -2,8 +2,7 @@
 #include <fstream>
 #include <string>
 
-#include <NIF/api.hpp>
-#include <NIF/header.hpp>
+#include <NIF/file.hpp>
 
 using namespace std;
 using namespace NIF;
@@ -16,10 +15,8 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	ofstream output(argv[2], ofstream::binary);
-	Header header = ReadHeaderInfo(argv[1]);
-	output << header;
-	output.close();
+	File input(argv[1]);
+	File copy(input);
 
 	return EXIT_SUCCESS;
 }

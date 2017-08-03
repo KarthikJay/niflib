@@ -7,12 +7,10 @@ using namespace std;
 
 namespace NIF
 {
-	const uint32_t kFormatWidth = 19;
-
 	string ExtraData::ToString() const
 	{
 		stringstream ss;
-		ss << setw(kFormatWidth) << "[BSExtraData Block]" << endl;
+		ss << setw(kBlockTypeWidth) << "[BSExtraData Block]" << endl;
 
 		return ss.str();
 	}

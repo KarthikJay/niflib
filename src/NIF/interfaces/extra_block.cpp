@@ -33,13 +33,12 @@ namespace NIF
 	string ExtraBlock::ToString() const
 	{
 		stringstream ss;
-		uint32_t width = 26;
 		uint32_t count = 0;
 
-		ss << setw(width) << "Extra Data Block Indices: " << endl;
+		ss << setw(kMemberTypeWidth) << "ExtraData Block Indices: " << endl;
 		for (auto& itr : extra_block_index)
 		{
-			ss << setw(width) << "[" + to_string(count++) + "]: ";
+			ss << setw(kMemberTypeWidth) << "[" + to_string(count++) + "]: ";
 			ss << itr << endl;
 		}
 

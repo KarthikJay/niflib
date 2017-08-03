@@ -5,7 +5,6 @@
 #include <NIF/interfaces/named_block.hpp>
 #include <NIF/enums.hpp>
 #include <NIF/utility.hpp>
-#include <NIF/file.hpp>
 
 using namespace std;
 
@@ -14,15 +13,14 @@ namespace NIF
 	string NamedBlock::GetBlockName() const
 	{
 		string name;
-		bool use_old = owner.GetHeader().version < NIFVersion::V20_1_0_3;
-		name = use_old ? block_name : owner.GetHeader().block_names[name_index];
+		bool use_old = owner.GetVersion() < NIFVersion::V20_1_0_3;
+		name = use_old ? block_name : header.block_names[name_index];
 
 		return name;
 	}
 
 	void NamedBlock::SetBlockName(const string& name)
 	{
-		Header &header = owner.GetHeader();
 		uint32_t length = name.length();
 		auto found = find(header.block_names.begin(), header.block_names.end(), name);
 
@@ -43,16 +41,17 @@ namespace NIF
 	string NamedBlock::ToString() const
 	{
 		stringstream ss;
-		uint32_t width = 11;
 
-		ss << setw(width) << "Block Name: " << block_name << endl;
+		ss	<< setw(kMemberTypeWidth) << "Block Name: "
+			<< setw(header.max_name_length) << block_name
+			<< setw(kIndexWidth) << "[" + to_string(name_index) + "]" << endl;
 
 		return ss.str();
 	}
 
 	uint32_t NamedBlock::GetSizeInBytes() const
 	{
-		bool use_old = owner.GetHeader().version < NIFVersion::V20_1_0_3;
+		bool use_old = owner.GetVersion() < NIFVersion::V20_1_0_3;
 		uint32_t num_size = use_old ? block_name.length() : sizeof(name_index);
 
 		return num_size;
@@ -60,7 +59,7 @@ namespace NIF
 
 	ostream& NamedBlock::WriteBinary(ostream& out) const
 	{
-		bool use_old = owner.GetHeader().version < NIFVersion::V20_1_0_3;
+		bool use_old = owner.GetVersion() < NIFVersion::V20_1_0_3;
 
 		if(use_old)
 		{
@@ -76,7 +75,7 @@ namespace NIF
 
 	istream& NamedBlock::ReadBinary(istream& in)
 	{
-		bool use_old = owner.GetHeader().version < NIFVersion::V20_1_0_3;
+		bool use_old = owner.GetVersion() < NIFVersion::V20_1_0_3;
 
 		if(use_old)
 		{

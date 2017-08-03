@@ -17,7 +17,10 @@ namespace NIF
 
 		std::string GetFileName() const;
 		std::string SetFileName(std::string& new_name);
-		Header& GetHeader();
+		constexpr uint32_t GetVersion() { return header.version; }
+		constexpr uint32_t GetUserVersion1() { return header.user_version_1; }
+		constexpr uint32_t GetUserVersion2() { return header.user_version_2; }
+		Header GetHeader() const { return header; }
 		Block* GetBlock(uint32_t block_id);
 		Block* GetBlock(std::string block_name);
 
@@ -25,9 +28,8 @@ namespace NIF
 
 		uint32_t CreateBlock(const std::string& block_type);
 
-		NIF_API friend std::ostream& operator<<(std::ostream& out, const File& nif);
 		NIF_API friend std::istream& operator>>(std::istream& in, File& nif);
-
+		NIF_API friend std::ostream& operator<<(std::ostream& out, const File& nif);
 		friend Block;
 	protected:
 		//! Name of NIF without file extension

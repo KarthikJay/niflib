@@ -12,11 +12,6 @@ namespace NIF
 		return file_name;
 	}
 
-	Header& File::GetHeader()
-	{
-		return header;
-	}
-
 	void File::UpdateHeader(const Block& new_block)
 	{
 		auto name_found = find(	header.block_type_names.begin(),

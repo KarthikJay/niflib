@@ -1,16 +1,10 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <memory>
-
+#include <NIF/file.hpp>
 #include <NIF/export_visibility.hpp>
 
 namespace NIF
 {
-	class File;
-	class Header;
-
 	//! Abstract NIF Block class
 	//! This class and all derived classes can only be created by #BlockFactory
 	class NIF_API Block
@@ -32,13 +26,17 @@ namespace NIF
 		}
 	protected:
 		File& owner;
+		Header& header;
+		std::vector<std::unique_ptr<Block>>& blocks;
 
-		Block(File& file) : owner(file) {}
+		//! String formatting widths used in derived #ToString() functions
+		const uint32_t kBlockTypeWidth = 30;
+		const uint32_t kMemberTypeWidth = 30;
+		const uint32_t kIndexWidth = 4;
+
+		Block(File& file) : owner(file), header(file.header), blocks(file.blocks) {}
 		Block(const Block& copy) = delete;
 		Block& operator=(const Block& copy) { return *this; }
-
-		Block& GetBlock(uint32_t block_index);
-		Header& GetHeader();
 
 		virtual std::ostream& WriteBinary(std::ostream& out) const = 0;
 		virtual std::istream& ReadBinary(std::istream& in) = 0;
