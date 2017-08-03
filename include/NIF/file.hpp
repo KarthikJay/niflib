@@ -12,8 +12,8 @@ namespace NIF
 	class NIF_API File
 	{
 	public:
-		File();
-		File(std::string filepath);
+		File() : file_name("default") {}
+		File(std::string& file_path);
 
 		std::string GetFileName() const;
 		void SetFileName(std::string& file_name);
@@ -21,8 +21,6 @@ namespace NIF
 		constexpr uint32_t GetUserVersion1() { return header.user_version_1; }
 		constexpr uint32_t GetUserVersion2() { return header.user_version_2; }
 		Header GetHeader() const { return header; }
-		Block* GetBlock(uint32_t block_id);
-		Block* GetBlock(std::string block_name);
 
 		uint32_t CreateBlock(const std::string& block_type);
 
@@ -40,6 +38,6 @@ namespace NIF
 		void UpdateHeader(const Block& new_block);
 
 		void ReadBinary(std::istream& nif);
-		void WriteBinary(std::istream& nif);
+		void WriteBinary(std::ostream& nif) const;
 	};
 }

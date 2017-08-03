@@ -25,6 +25,10 @@ namespace NIF
 		std::array<std::string, 3> info;
 		//! Declares if additional information strings are used
 		bool use_extra;
+		//! Read binary data from NIF
+		void ReadBinary(std::istream& in);
+		//! Write binary data to NIF
+		void WriteBinary(std::ostream& out) const;
 
 		//! Output export information as string
 		std::string ToString();
@@ -81,6 +85,10 @@ namespace NIF
 
 		//! Output NIFHeader as string
 		std::string ToString();
+		//! Read binary data from NIF
+		void ReadBinary(std::istream& in);
+		//! Write binary data to NIF
+		void WriteBinary(std::ostream& out) const;
 
 		friend File;
 	protected:
