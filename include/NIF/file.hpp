@@ -16,15 +16,13 @@ namespace NIF
 		File(std::string filepath);
 
 		std::string GetFileName() const;
-		std::string SetFileName(std::string& new_name);
+		void SetFileName(std::string& file_name);
 		constexpr uint32_t GetVersion() { return header.version; }
 		constexpr uint32_t GetUserVersion1() { return header.user_version_1; }
 		constexpr uint32_t GetUserVersion2() { return header.user_version_2; }
 		Header GetHeader() const { return header; }
 		Block* GetBlock(uint32_t block_id);
 		Block* GetBlock(std::string block_name);
-
-		void SetFileName(std::string file_name);
 
 		uint32_t CreateBlock(const std::string& block_type);
 
