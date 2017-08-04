@@ -17,7 +17,7 @@ namespace NIF
 	{
 		uint8_t length;
 		in.read(reinterpret_cast<char*>(&length), sizeof(length));
-		string buffer(length + 1, '\0');
+		string buffer(length, '\0');
 		in.read(&buffer[0], length);
 
 		return buffer;
@@ -27,7 +27,7 @@ namespace NIF
 	{
 		uint32_t length;
 		in.read(reinterpret_cast<char*>(&length), sizeof(length));
-		string buffer(length + 1, '\0');
+		string buffer(length, '\0');
 		in.read(&buffer[0], length);
 
 		return buffer;

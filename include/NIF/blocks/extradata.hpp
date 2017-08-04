@@ -20,7 +20,7 @@ namespace NIF
 		std::string GetBlockTypeName() const override;
 		uint32_t GetSizeInBytes() const override;
 
-		friend BlockFactoryRegistrar<ExtraData>;
+		friend BlockRegistrar<ExtraData>;
 	protected:
 		ExtraData(File& file) : Block(file) {}
 		ExtraData(const ExtraData& copy) = delete;
@@ -28,7 +28,5 @@ namespace NIF
 
 		std::ostream& WriteBinary(std::ostream& out) const override;
 		std::istream& ReadBinary(std::istream& in) override;
-	private:
-		static BlockFactoryRegistrar<ExtraData> registrar;
 	};
 }

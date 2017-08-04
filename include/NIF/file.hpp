@@ -4,6 +4,7 @@
 
 #include <NIF/export_visibility.hpp>
 #include <NIF/header.hpp>
+#include <NIF/interfaces/block.hpp>
 
 namespace NIF
 {
@@ -13,8 +14,9 @@ namespace NIF
 	{
 	public:
 		File() : file_name("default") {}
-		File(std::string& file_path);
+		File(std::string file_path);
 
+		std::string ToString() const;
 		std::string GetFileName() const;
 		void SetFileName(std::string& file_name);
 		constexpr uint32_t GetVersion() { return header.version; }

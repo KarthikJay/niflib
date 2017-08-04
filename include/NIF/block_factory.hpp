@@ -10,23 +10,34 @@ namespace NIF
 	class File;
 	class Block;
 
-	class BlockFactory
+	class NIF_API BlockFactory
 	{
 	public:
-		typedef std::unordered_map<std::string, std::function<Block*(File& owner)>> Registry;
-		static std::unique_ptr<Block> CreateNIFBlock(const std::string& type_name, File& owner);
-		static Registry& GetBlockTypeMapping();
+		BlockFactory(const BlockFactory& other) = delete;
+		BlockFactory& operator=(const BlockFactory& other) = delete;
+
+		typedef std::unordered_map<std::string, std::function<Block*(File& owner)>> BlockRegistry;
+
+		static BlockFactory& Instance();
+		std::unique_ptr<Block> CreateBlock(const std::string& type_name, File& owner);
+		void RegisterBlock(const std::string& type_name,
+			std::function<Block*(File& owner)> create);
+		void PrintSupportedBlocks();
+	private:
+		BlockRegistry block_types;
+
+		BlockFactory() {};
 	};
 
 	template<typename T>
-	struct BlockFactoryRegistrar
+	struct BlockRegistrar
 	{
-		BlockFactoryRegistrar(std::string object_name)
+		BlockRegistrar(const std::string& block_type)
 		{
-			BlockFactory::GetBlockTypeMapping()[object_name] = [](File& owner)
+			BlockFactory::Instance().RegisterBlock(block_type, [](File& owner)
 				{
 					return new T(owner);
-				};
+				});
 		}
 	};
 }

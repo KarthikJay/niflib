@@ -44,7 +44,7 @@ namespace NIF
 		return out;
 	}
 
-	string ExportInfo::ToString()
+	string ExportInfo::ToString() const
 	{
 		stringstream ss;
 		uint32_t width = 23;
@@ -262,13 +262,13 @@ namespace NIF
 		return out;
 	}
 
-	string Header::ToString()
+	string Header::ToString() const
 	{
 		stringstream ss;
 		uint32_t idx = 0;
 		uint32_t width = 23;
 
-		ss << header_line << endl;
+		ss << setw(width) << "[Header]: " << header_line << endl;
 		if(version <= NIFVersion::V3_1)
 		{
 			for(uint32_t i = 0; i < copyright.size(); ++i)

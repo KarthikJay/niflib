@@ -7,6 +7,8 @@ using namespace std;
 
 namespace NIF
 {
+	static BlockRegistrar<ExtraData> registrar("BSExtraData");
+
 	string ExtraData::ToString() const
 	{
 		stringstream ss;
@@ -34,6 +36,4 @@ namespace NIF
 	{
 		return in;
 	}
-
-	BlockFactoryRegistrar<ExtraData> ExtraData::registrar("BSExtraData");
 }

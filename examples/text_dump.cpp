@@ -2,8 +2,8 @@
 #include <sstream>
 #include <string>
 
-#include <NIF/api.hpp>
-#include <NIF/header.hpp>
+#include <NIF/file.hpp>
+#include <NIF/block_factory.hpp>
 
 using namespace std;
 using namespace NIF;
@@ -16,8 +16,10 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	Header header = ReadHeaderInfo(argv[1]);
-	cout << header.ToString();
+	BlockFactory::Instance().PrintSupportedBlocks();
+
+	File file(argv[1]);
+	cout << file.ToString();
 
 	return EXIT_SUCCESS;
 }

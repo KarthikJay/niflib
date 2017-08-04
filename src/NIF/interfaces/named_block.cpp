@@ -5,6 +5,7 @@
 #include <NIF/interfaces/named_block.hpp>
 #include <NIF/enums.hpp>
 #include <NIF/utility.hpp>
+#include <NIF/file.hpp>
 
 using namespace std;
 
@@ -84,6 +85,7 @@ namespace NIF
 		else
 		{
 			in.read(reinterpret_cast<char*>(&name_index), sizeof(name_index));
+			block_name = header.block_names[name_index];
 		}
 
 		return in;

@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 	}
 
 	File input(argv[1]);
-	File copy(input);
+	//File copy(input);
 
 	return EXIT_SUCCESS;
 }

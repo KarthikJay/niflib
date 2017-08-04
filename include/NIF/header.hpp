@@ -31,7 +31,7 @@ namespace NIF
 		void WriteBinary(std::ostream& out) const;
 
 		//! Output export information as string
-		std::string ToString();
+		std::string ToString() const;
 
 		friend Header;
 	protected:
@@ -84,7 +84,7 @@ namespace NIF
 		uint32_t num_groups;
 
 		//! Output NIFHeader as string
-		std::string ToString();
+		std::string ToString() const;
 		//! Read binary data from NIF
 		void ReadBinary(std::istream& in);
 		//! Write binary data to NIF

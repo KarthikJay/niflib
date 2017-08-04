@@ -1,21 +1,21 @@
 #include <algorithm>
 #include <iterator>
 #include <fstream>
+#include <sstream>
 
 #include <NIF/file.hpp>
 #include <NIF/block_factory.hpp>
-#include <NIF/interfaces/block.hpp>
 
 using namespace std;
 
 namespace NIF
 {
-	File::File(string& file_path)
+	File::File(string file_path)
 	{
-		SetFileName(file_path);
 		ifstream input(file_path, ifstream::binary);
 
-
+		SetFileName(file_path);
+		input >> *this;
 	}
 
 	string File::GetFileName() const
@@ -51,9 +51,42 @@ namespace NIF
 	{
 		uint32_t block_index = blocks.size();
 
-		blocks.emplace_back(BlockFactory::CreateNIFBlock(block_type, *this));
+		blocks.emplace_back(BlockFactory::Instance().CreateBlock(block_type, *this));
 
 		return block_index;
+	}
+
+	void File::ReadBinary(istream& in)
+	{
+		header.ReadBinary(in);
+		for(uint32_t i = 0; i < header.block_type_index.size(); ++i)
+		{
+			blocks.emplace_back(BlockFactory::Instance().CreateBlock(
+				header.block_type_names[header.block_type_index[i]], *this));
+			in >> *blocks[i];
+		}
+	}
+
+	void File::WriteBinary(ostream& out) const
+	{
+		out << header;
+		for(uint32_t i = 0; i < blocks.size(); ++i)
+		{
+			out << *blocks[i];
+		}
+	}
+
+	string File::ToString() const
+	{
+		stringstream ss;
+
+		ss << header.ToString();
+		for(auto& itr : blocks)
+		{
+			ss << itr->ToString();
+		}
+
+		return ss.str();
 	}
 
 	istream& operator>>(istream& in, File& nif)
