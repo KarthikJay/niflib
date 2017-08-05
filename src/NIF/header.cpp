@@ -8,6 +8,8 @@ using namespace std;
 
 namespace NIF
 {
+	const uint32_t kFormatWidth = 30;
+
 	void ExportInfo::ReadBinary(istream& in)
 	{
 		uint32_t num_info = use_extra ? info.max_size() : kOldInfoSize;
@@ -47,13 +49,12 @@ namespace NIF
 	string ExportInfo::ToString() const
 	{
 		stringstream ss;
-		uint32_t width = 23;
 		uint32_t num_info = use_extra ? info.max_size() : kOldInfoSize;
 
-		ss << setw(width) << "Creator: " << creator << endl;
+		ss << setw(kFormatWidth) << "Creator: " << creator << endl;
 		for(uint32_t i = 0; i < num_info; ++i)
 		{
-			ss << setw(width) << "Export Info [" + to_string(i + 1) + "]: " << info[i] << endl;
+			ss << setw(kFormatWidth) << "Export Info [" + to_string(i + 1) + "]: " << info[i] << endl;
 		}
 
 		return ss.str();
@@ -266,56 +267,55 @@ namespace NIF
 	{
 		stringstream ss;
 		uint32_t idx = 0;
-		uint32_t width = 23;
 
-		ss << setw(width) << "[Header]: " << header_line << endl;
+		ss << setw(kFormatWidth) << "[Header]: " << header_line << endl;
 		if(version <= NIFVersion::V3_1)
 		{
 			for(uint32_t i = 0; i < copyright.size(); ++i)
 			{
-				ss	<< setw(width) << "Copyright [" + to_string(i + 1) + "]: "
+				ss	<< setw(kFormatWidth) << "Copyright [" + to_string(i + 1) + "]: "
 					<< copyright[i] << endl;
 			}
 		}
-		ss << setw(width) << "Version: " << hex << version << dec << endl;
-		ss << setw(width) << "Endian Type: " << endian << endl;
-		ss << setw(width) << "User Version 1: " << user_version_1 << endl;
-		ss << setw(width) << "Number of blocks: " << block_type_index.size() << endl;
+		ss << setw(kFormatWidth) << "Version: " << hex << version << dec << endl;
+		ss << setw(kFormatWidth) << "Endian Type: " << endian << endl;
+		ss << setw(kFormatWidth) << "User Version 1: " << user_version_1 << endl;
+		ss << setw(kFormatWidth) << "Number of blocks: " << block_type_index.size() << endl;
 		if(user_version_1 >= 10 ||
 				((user_version_1 == 1) && version != NIFVersion::V10_2_0_0))
 		{
-			ss << setw(width) << "User Version 2: " << user_version_2 << endl;
+			ss << setw(kFormatWidth) << "User Version 2: " << user_version_2 << endl;
 		}
 		if(version >= NIFVersion::V30_0_0_2)
 		{
-			ss << setw(width) << "Image Preview Size: " << image_preview_size << endl;
+			ss << setw(kFormatWidth) << "Image Preview Size: " << image_preview_size << endl;
 		}
 		ss << export_info.ToString();
-		ss << setw(width) << "Number of Block Types: " << block_type_names.size() << endl;
+		ss << setw(kFormatWidth) << "Number of Block Types: " << block_type_names.size() << endl;
 		for(uint32_t i = 0; i < block_type_names.size(); ++i)
 		{
-			ss	<< setw(width) << "Block Type Name[" + to_string(i) + "]: "
+			ss	<< setw(kFormatWidth) << "Block Type Name[" + to_string(i) + "]: "
 				<< block_type_names[i] << endl;
 		}
 		for(uint32_t i = 0; i < block_type_index.size(); ++i)
 		{
-			ss	<< setw(width) << "Block Index[" + to_string(i) + "]: "
+			ss	<< setw(kFormatWidth) << "Block Index[" + to_string(i) + "]: "
 				<< block_type_names[block_type_index[i]] << endl;
 		}
 		for(uint32_t i = 0; i < block_type_index.size(); ++i)
 		{
-			ss	<< setw(width) << "Block Size[" + to_string(i) + "]: "
+			ss	<< setw(kFormatWidth) << "Block Size[" + to_string(i) + "]: "
 				<< block_sizes[i] << " bytes" << endl;
 		}
-		ss << setw(width) << "Number of Block Names: " << block_names.size() << endl;
-		ss << setw(width) << "Max Block Name Length: " << max_name_length << endl;
+		ss << setw(kFormatWidth) << "Number of Block Names: " << block_names.size() << endl;
+		ss << setw(kFormatWidth) << "Max Block Name Length: " << max_name_length << endl;
 		for(const auto& itr : block_names)
 		{
-			ss	<< setw(width) << "Block Name[" + to_string(++idx) + "]: " << itr << endl;
+			ss	<< setw(kFormatWidth) << "Block Name[" + to_string(++idx) + "]: " << itr << endl;
 		}
 		if(version >= NIFVersion::V20_1_0_3)
 		{
-			ss << setw(width) << "Number of Groups: " << num_groups << endl;
+			ss << setw(kFormatWidth) << "Number of Groups: " << num_groups << endl;
 		}
 
 		return ss.str();

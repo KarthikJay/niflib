@@ -10,6 +10,11 @@ namespace NIF
 
 	}
 
+	Block& Block::operator=(const Block& copy)
+	{
+		return *this;
+	}
+
 	std::istream& operator>>(std::istream& in, Block& nib)
 	{
 		nib.ReadBinary(in);

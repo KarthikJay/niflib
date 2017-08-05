@@ -15,7 +15,7 @@ namespace NIF
 	string NiExtraData::ToString() const
 	{
 		stringstream ss;
-		ss << setw(kBlockTypeWidth) << "[NiExtraData Block]" << endl;
+		ss << setw(kBlockTypeWidth) << "[NiExtraData]: ";
 		ss << NamedBlock::ToString();
 
 		return ss.str();

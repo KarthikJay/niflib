@@ -36,7 +36,7 @@ namespace NIF
 
 		Block(File& file);
 		Block(const Block& copy) = delete;
-		Block& operator=(const Block& copy) { return *this; }
+		Block& operator=(const Block& copy);
 
 		virtual std::ostream& WriteBinary(std::ostream& out) const = 0;
 		virtual std::istream& ReadBinary(std::istream& in) = 0;

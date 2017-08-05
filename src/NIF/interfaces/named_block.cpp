@@ -43,9 +43,8 @@ namespace NIF
 	{
 		stringstream ss;
 
-		ss	<< setw(kMemberTypeWidth) << "Block Name: "
-			<< setw(header.max_name_length) << block_name
-			<< setw(kIndexWidth) << "[" + to_string(name_index) + "]" << endl;
+		ss	<< block_name << setw(kIndexWidth) << "[" + to_string(name_index) + "]"
+			<< endl;
 
 		return ss.str();
 	}
