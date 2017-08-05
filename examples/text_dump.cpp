@@ -16,8 +16,6 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	BlockFactory::Instance().PrintSupportedBlocks();
-
 	File file(argv[1]);
 	cout << file.ToString();
 

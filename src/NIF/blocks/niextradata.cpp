@@ -10,9 +10,9 @@ using namespace std;
 namespace NIF
 {
 
-	static BlockRegistrar<NamedExtraData> registrar("NiExtraData");
+	static BlockRegistrar<NiExtraData> registrar("NiExtraData");
 
-	string NamedExtraData::ToString() const
+	string NiExtraData::ToString() const
 	{
 		stringstream ss;
 		ss << setw(kBlockTypeWidth) << "[NiExtraData Block]" << endl;
@@ -21,17 +21,17 @@ namespace NIF
 		return ss.str();
 	}
 
-	string NamedExtraData::GetBlockTypeName() const
+	string NiExtraData::GetBlockTypeName() const
 	{
 		return "NiExtraData";
 	}
 
-	uint32_t NamedExtraData::GetSizeInBytes() const
+	uint32_t NiExtraData::GetSizeInBytes() const
 	{
 		return ExtraData::GetSizeInBytes() + NamedBlock::GetSizeInBytes();
 	}
 
-	ostream& NamedExtraData::WriteBinary(ostream& out) const
+	ostream& NiExtraData::WriteBinary(ostream& out) const
 	{
 		auto current_version = owner.GetVersion();
 		if(current_version >= NIFVersion::V10_1_0_0)
@@ -42,7 +42,7 @@ namespace NIF
 		return out;
 	}
 
-	istream& NamedExtraData::ReadBinary(istream& in)
+	istream& NiExtraData::ReadBinary(istream& in)
 	{
 		auto current_version = owner.GetVersion();
 		if(current_version >= NIFVersion::V10_1_0_0)

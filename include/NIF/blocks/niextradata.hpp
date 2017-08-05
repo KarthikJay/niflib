@@ -6,18 +6,18 @@
 namespace NIF
 {
 	//! ExtraData block that contains a uint32_t string name field
-	class NIF_API NamedExtraData : public ExtraData, public virtual NamedBlock
+	class NIF_API NiExtraData : public ExtraData, public virtual NamedBlock
 	{
 	public:
 		std::string ToString() const override;
 		std::string GetBlockTypeName() const override;
 		uint32_t GetSizeInBytes() const override;
 
-		friend BlockRegistrar<NamedExtraData>;
+		friend BlockRegistrar<NiExtraData>;
 	protected:
-		NamedExtraData(File& file) : Block(file), ExtraData(file) {};
-		NamedExtraData(const NamedExtraData& copy) = delete;
-		NamedExtraData& operator=(const NamedExtraData& copy) { return *this; }
+		NiExtraData(File& file) : Block(file), ExtraData(file) {};
+		NiExtraData(const NiExtraData& copy) = delete;
+		NiExtraData& operator=(const NiExtraData& copy) { return *this; }
 
 		std::ostream& WriteBinary(std::ostream& out) const override;
 		std::istream& ReadBinary(std::istream& in) override;
