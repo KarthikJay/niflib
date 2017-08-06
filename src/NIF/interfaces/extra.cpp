@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include <NIF/interfaces/extra_block.hpp>
+#include <NIF/interfaces/extra.hpp>
 #include <NIF/utility.hpp>
 #include <NIF/file.hpp>
 
@@ -10,12 +10,12 @@ using namespace std;
 
 namespace NIF
 {
-	void ExtraBlock::LinkExtraData(uint32_t block_index)
+	void Extra::LinkExtraData(uint32_t block_index)
 	{
 		extra_block_index.push_back(block_index);
 	}
 
-	void ExtraBlock::UnlinkExtraData(uint32_t block_index)
+	void Extra::UnlinkExtraData(uint32_t block_index)
 	{
 		auto found = find(extra_block_index.begin(), extra_block_index.end(), block_index);
 
@@ -25,12 +25,12 @@ namespace NIF
 		}
 	}
 
-	void ExtraBlock::UnlinkAllExtraData()
+	void Extra::UnlinkAllExtraData()
 	{
 		extra_block_index.clear();
 	}
 
-	string ExtraBlock::ToString() const
+	string Extra::ToString() const
 	{
 		stringstream ss;
 		uint32_t count = 0;
@@ -45,12 +45,12 @@ namespace NIF
 		return ss.str();
 	}
 
-	uint32_t ExtraBlock::GetSizeInBytes() const
+	uint32_t Extra::GetSizeInBytes() const
 	{
 		return sizeof(uint32_t) * extra_block_index.size();
 	}
 
-	ostream& ExtraBlock::WriteBinary(ostream& out) const
+	ostream& Extra::WriteBinary(ostream& out) const
 	{
 		WriteUnsignedIntegral(out, extra_block_index.size());
 		for(const auto& itr : extra_block_index)
@@ -61,7 +61,7 @@ namespace NIF
 		return out;
 	}
 
-	std::istream& ExtraBlock::ReadBinary(std::istream& in)
+	std::istream& Extra::ReadBinary(std::istream& in)
 	{
 		uint32_t list_size;
 

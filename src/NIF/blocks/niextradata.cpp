@@ -16,7 +16,7 @@ namespace NIF
 	{
 		stringstream ss;
 		ss << setw(kBlockTypeWidth) << "[NiExtraData]: ";
-		ss << NamedBlock::ToString();
+		ss << Nameable::ToString();
 
 		return ss.str();
 	}
@@ -28,7 +28,7 @@ namespace NIF
 
 	uint32_t NiExtraData::GetSizeInBytes() const
 	{
-		return ExtraData::GetSizeInBytes() + NamedBlock::GetSizeInBytes();
+		return ExtraData::GetSizeInBytes() + Nameable::GetSizeInBytes();
 	}
 
 	ostream& NiExtraData::WriteBinary(ostream& out) const
@@ -36,7 +36,7 @@ namespace NIF
 		auto current_version = owner.GetVersion();
 		if(current_version >= NIFVersion::V10_1_0_0)
 		{
-			NamedBlock::WriteBinary(out);
+			Nameable::WriteBinary(out);
 		}
 
 		return out;
@@ -47,7 +47,7 @@ namespace NIF
 		auto current_version = owner.GetVersion();
 		if(current_version >= NIFVersion::V10_1_0_0)
 		{
-			NamedBlock::ReadBinary(in);
+			Nameable::ReadBinary(in);
 		}
 
 		return in;

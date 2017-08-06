@@ -1,12 +1,12 @@
 #pragma once
 
-#include <NIF/interfaces/named_block.hpp>
+#include <NIF/interfaces/nameable.hpp>
 #include <NIF/blocks/extradata.hpp>
 
 namespace NIF
 {
 	//! ExtraData block that contains a uint32_t string name field
-	class NIF_API NiExtraData : public ExtraData, public virtual NamedBlock
+	class NIF_API NiExtraData : public ExtraData, public virtual Nameable
 	{
 	public:
 		std::string ToString() const override;

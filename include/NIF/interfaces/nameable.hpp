@@ -5,7 +5,7 @@
 
 namespace NIF
 {
-	class NIF_API NamedBlock : public virtual Block
+	class NIF_API Nameable : public virtual Block
 	{
 	public:
 		std::string GetBlockName() const;

@@ -10,7 +10,7 @@ namespace NIF
 	class ExtraData;
 
 	//! Interface for objects that can hold ExtraData blocks
-	class NIF_API ExtraBlock : public virtual Block
+	class NIF_API Extra : public virtual Block
 	{
 	public:
 		void LinkExtraData(uint32_t block_index);

@@ -5,7 +5,7 @@
 
 namespace NIF
 {
-	class NIF_API ControllerBlock : public virtual Block
+	class NIF_API Controller : public virtual Block
 	{
 	public:
 		ToString() const;
