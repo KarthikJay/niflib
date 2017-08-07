@@ -10,11 +10,11 @@ namespace NIF
 	public:
 		std::string GetBlockName() const;
 		void SetBlockName(const std::string&);
-		std::string ToString() const;
-		uint32_t GetSizeInBytes() const;
+		std::string ToString() const override;
+		uint32_t GetSizeInBytes() const override;
 	protected:
-		std::ostream& WriteBinary(std::ostream& out) const;
-		std::istream& ReadBinary(std::istream& in);
+		std::ostream& WriteBinary(std::ostream& out) const override;
+		std::istream& ReadBinary(std::istream& in) override;
 	private:
 		//! Index into #Header::block_names containing the name for this block.
 		uint32_t name_index;

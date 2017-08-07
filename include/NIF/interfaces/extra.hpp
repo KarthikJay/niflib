@@ -16,7 +16,6 @@ namespace NIF
 		void LinkExtraData(uint32_t block_index);
 		void UnlinkExtraData(uint32_t block_index);
 		void UnlinkAllExtraData();
-		ExtraData& GetExtraData(uint32_t num_data);
 		/*
 		const std::vector<uint32_t>& GetExtraDataIndexList() const;
 		void RemoveExtraData(uint32_t block_index)

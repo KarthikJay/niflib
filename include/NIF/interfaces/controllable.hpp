@@ -1,23 +1,23 @@
 #pragma once
 
-#include <string>
-
 #include <NIF/interfaces/block.hpp>
 #include <NIF/export_visibility.hpp>
 
 namespace NIF
 {
-	class NIF_API ControllableBlock : public virtual Block
+	class Controller;
+
+	class NIF_API Controllable : public virtual Block
 	{
 	public:
-		// GetControllerBlock();
-
-		std::string ToString() const;
-		uint32_t GetSizeInBytes() const;
+		std::string ToString() const override;
+		uint32_t GetSizeInBytes() const override;
 	protected:
 		uint32_t controller_index;
 
-		std::ostream& WriteBinary(std::ostream& out) const;
-		std::istream& ReadBinary(std::istream& in);
+		Controllable() : controller_index(0xFFFFFFFF) {}
+
+		std::istream& ReadBinary(std::istream& in) override;
+		std::ostream& WriteBinary(std::ostream& out) const override;
 	};
 }
