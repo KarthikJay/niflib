@@ -130,6 +130,14 @@ namespace NIF
 		time_end = end;
 	}
 
+	void Controller::Normalize()
+	{
+		time_start = frequency * time_start + phase;
+		time_end = frequency * time_end + phase;
+		frequency = 1.0f;
+		phase = 0.0f;
+	}
+
 	istream& Controller::ReadBinary(istream& in)
 	{
 		in.read(reinterpret_cast<char*>(&next_controller), sizeof(next_controller));

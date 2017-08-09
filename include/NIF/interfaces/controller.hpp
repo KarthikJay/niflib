@@ -76,6 +76,7 @@ namespace NIF
 		float GetStartTime() const;
 		float GetEndTime() const;
 		void SetTime(float start, float end);
+		void Normalize();
 		/*
 		void LinkNextController(uint32_t block_index);
 		uint32_t GetTarget();
