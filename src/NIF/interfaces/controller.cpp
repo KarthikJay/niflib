@@ -71,12 +71,63 @@ namespace NIF
 
 	void Controller::ToggleManagement()
 	{
-		flags = (flags & kMaskManager) | (flags & ~kMaskManager);
+		flags = (~flags & kMaskManager) | (flags & ~kMaskManager);
 	}
 
 	Controller::TimeScale Controller::IsTimeScaled() const
 	{
 		return TimeScale(flags & kMaskTimeScale);
+	}
+
+	void Controller::ToggleTimeScale()
+	{
+		flags = (~flags & kMaskTimeScale) | (flags & ~kMaskTimeScale);
+	}
+
+	Controller::ForceUpdate Controller::IsUpdateForced() const
+	{
+		return ForceUpdate(flags & kMaskForceUpdate);
+	}
+
+	void Controller::ToggleForceUpdate()
+	{
+		flags = (~flags & kMaskForceUpdate) | (flags & ~kMaskForceUpdate);
+	}
+
+	float Controller::GetFrequency() const
+	{
+		return frequency;
+	}
+
+	void Controller::SetFrequency(float frequency)
+	{
+		this->frequency = frequency;
+	}
+
+	float Controller::GetPhase() const
+	{
+		return phase;
+	}
+
+	void Controller::SetPhase(float phase)
+	{
+		this->phase = phase;
+	}
+
+	float Controller::GetStartTime() const
+	{
+		return time_start;
+	}
+	
+	float Controller::GetEndTime() const
+	{
+		return time_end;
+	}
+
+	void Controller::SetTime(float start, float end)
+	{
+		time_start = start;
+		time_end = end;
 	}
 
 	istream& Controller::ReadBinary(istream& in)
